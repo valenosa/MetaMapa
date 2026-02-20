@@ -90,6 +90,20 @@
 
             <div class="chips-box">
                 <div class="chips">
+
+                    <span th:if="${itemsPage.totalElements == 0}" class="chip-toggle">
+                        <div>
+                            <input type="radio" name="itemSelected"
+                                   id="item-modal:sin-categoria"
+                                   value="0::Sin categoría"
+                                   required
+                            />
+                            <label for="item-modal:sin-categoria" class="chip">
+                                Sin categoría
+                            </label>
+                        </div>
+                    </span>
+
                     <span th:each="item : ${itemsPage.content}" class="chip-toggle">
                         <div>
                             <input type="radio" name="itemSelected"
