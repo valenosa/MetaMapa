@@ -1,8 +1,12 @@
+# --- Server ---
 server.port=8082
 
-# NaturalDisastersAPI Configuration
+# --- Natural-disasters API (provided by the course) ---
 natural-disasters.api.base-url=https://api-ddsi.disilab.ar/public
-natural-disasters.api.credentials.email=ddsi@gmail.com
-natural-disasters.api.credentials.password=ddsi2025*
+natural-disasters.api.credentials.email=<NATURAL_DISASTERS_API_EMAIL>
+natural-disasters.api.credentials.password=<NATURAL_DISASTERS_API_PASSWORD>
+
+# Parallel page downloads when importing
 thread.count=4
+# Push new and updated events to the subscribed aggregators (every hour)
 event.notify.cron=0 0 * * * *
