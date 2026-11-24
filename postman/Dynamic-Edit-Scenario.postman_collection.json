@@ -1,0 +1,417 @@
+{
+	"info": {
+		"name": "Dynamic source: edit scenario",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"description": "End-to-end moderation scenario for the dynamic source, meant for the Collection Runner on a fresh database: creates three events, accepts two submissions and rejects one, requests edits and approves two edit requests. X-User-Id simulates the header injected by the gateway."
+	},
+	"item": [
+		{
+			"name": "Create Event 1",
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "X-User-Id",
+						"value": "{{testUserId}}",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n  \"title\": \"Vertido químico en el río\",\r\n  \"description\": \"Se observó espuma blanca en la orilla del río en la zona norte.\",\r\n  \"category\": \"CONTAMINACION\",\r\n  \"latitude\": -34.620101,\r\n  \"longitude\": -58.410087,\r\n  \"eventDate\": \"2025-05-12\"\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{dynamic-source-baseUrl}}/events",
+					"host": [
+						"{{dynamic-source-baseUrl}}"
+					],
+					"path": [
+						"events"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Create Event 2",
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "X-User-Id",
+						"value": "{{testUserId}}",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n  \"title\": \"Corte de calle por protesta\",\r\n  \"description\": \"Vecinos reclaman por falta de luz desde hace 48 horas.\",\r\n  \"category\": \"PROTESTA\",\r\n  \"latitude\": -34.580000,\r\n  \"longitude\": -58.420000,\r\n  \"eventDate\": \"2025-05-13\"\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{dynamic-source-baseUrl}}/events",
+					"host": [
+						"{{dynamic-source-baseUrl}}"
+					],
+					"path": [
+						"events"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Create Event 3",
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "X-User-Id",
+						"value": "{{testUserId}}",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n  \"title\": \"Incendio en zona norte\",\r\n  \"description\": \"Se reporta un incendio en un terreno baldío cercano a la ruta.\",\r\n  \"category\": \"INCENDIO\",\r\n  \"latitude\": -34.603722,\r\n  \"longitude\": -58.381592,\r\n  \"eventDate\": \"2025-05-15T14:30:00\"\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{dynamic-source-baseUrl}}/events",
+					"host": [
+						"{{dynamic-source-baseUrl}}"
+					],
+					"path": [
+						"events"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "ACCEPT Submission 1",
+			"request": {
+				"method": "PUT",
+				"header": [
+					{
+						"key": "X-User-Id",
+						"value": "{{testUserId}}",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n  \"state\": \"ACCEPTED\",\r\n  \"suggestion\": \"\"\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{dynamic-source-baseUrl}}/submissions/:id",
+					"host": [
+						"{{dynamic-source-baseUrl}}"
+					],
+					"path": [
+						"submissions",
+						":id"
+					],
+					"variable": [
+						{
+							"key": "id",
+							"value": "1"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "ACCEPT Submission 2",
+			"request": {
+				"method": "PUT",
+				"header": [
+					{
+						"key": "X-User-Id",
+						"value": "{{testUserId}}",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n  \"state\": \"ACCEPTED\",\r\n  \"suggestion\": \"\"\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{dynamic-source-baseUrl}}/submissions/:id",
+					"host": [
+						"{{dynamic-source-baseUrl}}"
+					],
+					"path": [
+						"submissions",
+						":id"
+					],
+					"variable": [
+						{
+							"key": "id",
+							"value": "2"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "REJECT Submission 3",
+			"request": {
+				"method": "PUT",
+				"header": [
+					{
+						"key": "X-User-Id",
+						"value": "{{testUserId}}",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n  \"state\": \"REJECTED\",\r\n  \"suggestion\": \"\"\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{dynamic-source-baseUrl}}/submissions/:id",
+					"host": [
+						"{{dynamic-source-baseUrl}}"
+					],
+					"path": [
+						"submissions",
+						":id"
+					],
+					"variable": [
+						{
+							"key": "id",
+							"value": "3"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Edit Event 1",
+			"request": {
+				"method": "PUT",
+				"header": [
+					{
+						"key": "X-User-Id",
+						"value": "{{testUserId}}",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n  \"title\": \"Cambio Location a Comuna 14\",\r\n  \"description\": \"Se observó espuma blanca en la orilla del río en la zona norte.\",\r\n  \"category\": \"test\",\r\n  \"latitude\": -34.580000,\r\n  \"longitude\": -58.420000,\r\n  \"eventDate\": \"2026-01-01\"\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{dynamic-source-baseUrl}}/events/:eventId",
+					"host": [
+						"{{dynamic-source-baseUrl}}"
+					],
+					"path": [
+						"events",
+						":eventId"
+					],
+					"variable": [
+						{
+							"key": "eventId",
+							"value": "1"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Edit Event 2",
+			"request": {
+				"method": "PUT",
+				"header": [
+					{
+						"key": "X-User-Id",
+						"value": "{{testUserId}}",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n  \"title\": \"Corte de calle por protesta\",\r\n  \"description\": \"Cambio Location (Antes Comuna 14) y desc\",\r\n  \"category\": \"PROTESTA\",\r\n  \"latitude\": -33.09129,\r\n  \"longitude\": -61.174263,\r\n  \"eventDate\": \"2025-05-13\"\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{dynamic-source-baseUrl}}/events/:eventId",
+					"host": [
+						"{{dynamic-source-baseUrl}}"
+					],
+					"path": [
+						"events",
+						":eventId"
+					],
+					"variable": [
+						{
+							"key": "eventId",
+							"value": "2"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Edit Event 3",
+			"request": {
+				"method": "PUT",
+				"header": [
+					{
+						"key": "X-User-Id",
+						"value": "{{testUserId}}",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n  \"title\": \"Incendio en zona norte\",\r\n  \"description\": \"Se reporta un incendio en un terreno baldío cercano a la ruta.\",\r\n  \"category\": \"INCENDIO\",\r\n  \"latitude\": -34.603722,\r\n  \"longitude\": -58.381592,\r\n  \"eventDate\": \"2026-01-01\"\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{dynamic-source-baseUrl}}/events/:eventId",
+					"host": [
+						"{{dynamic-source-baseUrl}}"
+					],
+					"path": [
+						"events",
+						":eventId"
+					],
+					"variable": [
+						{
+							"key": "eventId",
+							"value": "2"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "APPROVE EditionRequest 1",
+			"request": {
+				"method": "PUT",
+				"header": [
+					{
+						"key": "X-User-Id",
+						"value": "{{testUserId}}",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"newEvaluationStatus\": \"APPROVED\"\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{dynamic-source-baseUrl}}/edition-requests/:editionRequestID",
+					"host": [
+						"{{dynamic-source-baseUrl}}"
+					],
+					"path": [
+						"edition-requests",
+						":editionRequestID"
+					],
+					"variable": [
+						{
+							"key": "editionRequestID",
+							"value": "1"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "APPROVE EditionRequest 2",
+			"request": {
+				"method": "PUT",
+				"header": [
+					{
+						"key": "X-User-Id",
+						"value": "{{testUserId}}",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"newEvaluationStatus\": \"APPROVED\"\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{dynamic-source-baseUrl}}/edition-requests/:editionRequestID",
+					"host": [
+						"{{dynamic-source-baseUrl}}"
+					],
+					"path": [
+						"edition-requests",
+						":editionRequestID"
+					],
+					"variable": [
+						{
+							"key": "editionRequestID",
+							"value": "2"
+						}
+					]
+				}
+			},
+			"response": []
+		}
+	]
+}
