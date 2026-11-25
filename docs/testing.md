@@ -39,6 +39,27 @@ Being transparent about coverage:
 - There are no unit tests in the repository today. JUnit tests were written for the first version of the static source; they became obsolete when the second delivery changed the requirements and were later removed.
 - No CI pipeline was set up during the course. Newman (below) is the natural way to add one.
 
+## Last run
+
+On **2026-11-24** the `API Gateway` folder of the main collection was run with Newman against a local stack: registry, user, aggregation, static and dynamic services, gateway and web client, each on an empty test database.
+
+| Executed | Failed |
+|---|---|
+| 11 requests | 0 |
+| 6 assertions | 0 |
+
+The route-security checks, run with a freshly registered `CONTRIBUTOR` token, returned the expected codes:
+
+| Route | Status |
+|---|---|
+| `/test/authenticated` | 200 |
+| `/test/admin-only` | 403 |
+| `/test/admin-and-contributor` | 403 |
+| `/test/admin-or-contributor` | 200 |
+| `/test/soft-auth` (no token) | 200 |
+
+The folder's `Create Event` request returned `415`: it sends raw JSON, while the dynamic source now expects `multipart/form-data` (an `event` part plus optional `multimedia` files). That request needs updating.
+
 ## Running the collections
 
 1. Start the system ([running-locally.md](running-locally.md)).

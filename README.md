@@ -92,6 +92,14 @@ There is no Docker setup on `main`; every service runs as a regular Spring Boot 
 
 Step-by-step guide, including how to generate the JWT keys and create an admin user: [docs/running-locally.md](docs/running-locally.md).
 
+## Screenshots
+
+Taken from a local run with an empty database (the UI is in Spanish).
+
+| Landing page | Map view with filters |
+|---|---|
+| ![Landing page](docs/images/landing.png) | ![Map view](docs/images/map.png) |
+
 ## Testing
 
 The API was tested with **Postman collections organized by service and feature** (in [`postman/`](postman/)):
@@ -100,6 +108,7 @@ The API was tested with **Postman collections organized by service and feature**
 - One environment file holds every base URL. The login, register and refresh requests store the returned tokens in environment variables, and the protected requests reuse them as `Bearer {{AccessToken}}`.
 - A dedicated folder exercises the gateway's route-security rules: public, any authenticated user, admin only, admin **and** contributor, admin **or** contributor, and optional authentication.
 - **Assertions:** the collections contain 6 automated assertions (`pm.test`), all on the authentication flow. Every other request is checked by hand against the expected status code.
+- **Last run (2026-11-24, local stack, Newman):** the `API Gateway` folder ran 11 requests and passed **6/6 assertions**. The route-security checks returned the documented status codes.
 
 To run a collection from the command line:
 
