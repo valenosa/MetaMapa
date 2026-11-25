@@ -59,7 +59,7 @@ More detail in [docs/architecture.md](docs/architecture.md).
   - *Proxy*: imports from the course's natural-disasters API (pages fetched in parallel) and from other MetaMapa instances.
 - **Aggregation**: collections defined by membership criteria (title, category, date range), filters and pagination, curated navigation backed by three consensus algorithms re-evaluated every night, and deletion requests with automatic spam rejection.
 - **Location normalization**: coordinates are turned into province, department and municipality through Argentina's GeoRef API, in parallel batches of up to 1,000 points, with deduplicated persistence.
-- **Security**: RS256-signed JWTs, BCrypt password hashing, role rules declared per route in the gateway configuration, and user-identity headers that only the gateway can set.
+- **Security**: RS256-signed JWTs, BCrypt password hashing, role-based access control (two roles) enforced per route at the gateway, and user-identity headers that only the gateway can set.
 - **Statistics**: top categories, top provinces by category or collection, and busiest hours by category, recomputed on a schedule from aggregator data.
 - **Multimedia**: files stored in MinIO through the S3 API, restricted by a MIME-type whitelist and a maximum number of files per event, and served through the gateway.
 

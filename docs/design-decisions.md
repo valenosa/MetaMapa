@@ -64,15 +64,15 @@ Short architecture decision records (ADRs) for the main decisions. They are base
 
 ---
 
-## ADR-06: Coarse roles now, RBAC later
+## ADR-06: RBAC now with two coarse roles, fine-grained permissions later
 
 **Context.** The domain has two kinds of users: contributors and administrators.
 
-**Decision.** Two non-overlapping roles (`ADMIN`, `CONTRIBUTOR`) carried in the access token and checked by the gateway. Access tokens are short-lived (5 minutes in the example configuration), so role changes take effect quickly.
+**Decision.** Role-based access control (RBAC) with two non-overlapping roles (`ADMIN`, `CONTRIBUTOR`), carried in the access token and enforced per route at the gateway. Access tokens are short-lived (5 minutes in the example configuration), so role changes take effect quickly.
 
-**Alternatives.** Role-based access control with fine-grained permissions. It follows the principle of least privilege and is more flexible, but it takes longer to set up while the features are still changing.
+**Alternatives.** Fine-grained permissions, with roles as sets of permissions. It follows the principle of least privilege and is more flexible, but it takes longer to set up while the features are still changing.
 
-**Consequences.** Delivered quickly and is fully functional. Roles have to be repeated in the gateway and the web client, and they are coarse. The documented next step is RBAC: roles become sets of permissions managed in `user-service`.
+**Consequences.** Delivered quickly and is fully functional. Roles have to be repeated in the gateway and the web client, and they are coarse. The documented next step is fine-grained permissions: roles become sets of permissions managed in `user-service`.
 
 ---
 

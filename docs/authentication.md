@@ -141,4 +141,4 @@ These were documented by the team as deliberate scope decisions:
 
 - **Roles travel inside the token**, so the gateway never has to call `user-service`. The cost is that a role change only takes effect when the access token expires; short-lived access tokens limit that window. Possible next steps: re-check roles on sensitive routes, or keep a token blacklist (for example in Redis).
 - **Refresh tokens are rotated but old ones are not invalidated yet.** Storing issued refresh tokens, or blacklisting the used ones, is the planned fix.
-- **Coarse roles instead of permissions.** Two non-overlapping roles were enough for the domain and kept delivery fast. The planned evolution is role-based access control (RBAC): the gateway and web client check fine-grained permissions, and roles become sets of permissions managed in `user-service`.
+- **Two coarse roles instead of fine-grained permissions.** Role-based access control with two non-overlapping roles was enough for the domain and kept delivery fast. The planned evolution is fine-grained permissions: the gateway and web client check permissions, and roles become sets of permissions managed in `user-service`.
