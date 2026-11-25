@@ -58,4 +58,4 @@ The project was built in six deliveries over the 2025 academic year. For each on
 | September – October 2025 | Location normalization; web client; statistics service; API Gateway + Eureka |
 | December 2025 | User service, RS256 tokens, gateway authentication filter |
 | January – February 2026 | Object storage (MinIO), media in the UI, pagination and final fixes |
-| November 2026 (after the course) | Documentation, a gateway fix for forged identity headers, and automated assertions in the Postman collections |
+| November 2026 (after the course) | Documentation, a gateway fix for forged identity headers, a fix for duplicated provinces and categories under concurrent pushes, and automated assertions in the Postman collections |
