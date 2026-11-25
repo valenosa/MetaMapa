@@ -150,4 +150,4 @@ A fellow teammate and I were the two main contributors, with 86% of the ~1,050 c
 
 ## Team
 
-Built by a team of five at UTN FRBA: [@FacundoDiezF](https://github.com/FacundoDiezF), [@valenosa](https://github.com/valenosa), [@mateonhernandez](https://github.com/mateonhernandez), [@Cicalalautaro](https://github.com/Cicalalautaro) and [@lDevecchi](https://github.com/lDevecchi).
+Built by a team of five at UTN FRBA. Main contributors: [@FacundoDiezF](https://github.com/FacundoDiezF) and [@valenosa](https://github.com/valenosa) (86% of the commits). Also on the team: [@mateonhernandez](https://github.com/mateonhernandez), [@Cicalalautaro](https://github.com/Cicalalautaro) and [@lDevecchi](https://github.com/lDevecchi).
