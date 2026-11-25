@@ -59,7 +59,7 @@ More detail in [docs/architecture.md](docs/architecture.md).
   - *Proxy*: imports from the course's natural-disasters API (pages fetched in parallel) and from other MetaMapa instances.
 - **Aggregation**: collections defined by membership criteria (title, category, date range), filters and pagination, curated navigation backed by three consensus algorithms re-evaluated every night, and deletion requests with automatic spam rejection.
 - **Location normalization**: coordinates are turned into province, department and municipality through Argentina's GeoRef API, in parallel batches of up to 1,000 points, with deduplicated persistence.
-- **Security**: RS256-signed JWTs, BCrypt password hashing, and role rules declared per route in the gateway configuration.
+- **Security**: RS256-signed JWTs, BCrypt password hashing, role rules declared per route in the gateway configuration, and user-identity headers that only the gateway can set.
 - **Statistics**: top categories, top provinces by category or collection, and busiest hours by category, recomputed on a schedule from aggregator data.
 - **Multimedia**: files stored in MinIO through the S3 API, restricted by a MIME-type whitelist and a maximum number of files per event, and served through the gateway.
 
@@ -102,18 +102,21 @@ Taken from a local run with an empty database (the UI is in Spanish).
 
 ## Testing
 
-The API was tested with **Postman collections organized by service and feature** (in [`postman/`](postman/)):
+The API is tested with **Postman collections organized by service and feature** (in [`postman/`](postman/)):
 
-- **3 collections with 78 requests in total**: the main collection (61 requests covering every service and the gateway), a data-seeding flow (6) and an end-to-end moderation scenario for the dynamic source (11).
-- One environment file holds every base URL. The login, register and refresh requests store the returned tokens in environment variables, and the protected requests reuse them as `Bearer {{AccessToken}}`.
-- A dedicated folder exercises the gateway's route-security rules: public, any authenticated user, admin only, admin **and** contributor, admin **or** contributor, and optional authentication.
-- **Assertions:** the collections contain 6 automated assertions (`pm.test`), all on the authentication flow. Every other request is checked by hand against the expected status code.
-- **Last run (2026-11-24, local stack, Newman):** the `API Gateway` folder ran 11 requests and passed **6/6 assertions**. The route-security checks returned the documented status codes.
+- **3 collections with 86 requests**: the main collection (69 requests covering every service and the gateway), a data-seeding flow (6) and an end-to-end moderation scenario for the dynamic source (11).
+- **53 automated assertions** (`pm.test`):
+  - *Authentication*: register, login and refresh, plus the error cases (existing username, wrong password, access token sent to the refresh endpoint).
+  - *Route security*: one request per gateway rule with the expected `200`, `401` or `403`, including a missing, malformed or refresh token and the wrong role, and a regression test that forged `X-User-Id` headers never reach a service.
+  - *Moderation*: every step of the dynamic-source scenario, from submission to approved edit.
+- One environment file holds every base URL. Login and register store the returned tokens, and protected requests reuse them as `Bearer {{AccessToken}}`.
+- The other folders are checked by hand. There is no CI pipeline.
+- **Last run (2026-11-24, local stack, Newman):** gateway folder 19 requests and **36/36 assertions**; moderation scenario 11 requests and **17/17 assertions**.
 
-To run a collection from the command line:
+To run the gateway security tests from the command line:
 
 ```bash
-npx newman run postman/MetaMapa.postman_collection.json -e postman/MetaMapa.local.postman_environment.example.json
+npx newman run postman/MetaMapa.postman_collection.json -e postman/MetaMapa.local.postman_environment.example.json --folder "API Gateway"
 ```
 
 Details, coverage and how to run the collections in Postman's Collection Runner: [docs/testing.md](docs/testing.md).

@@ -14,7 +14,7 @@
 | Piece | Responsibility | Key code |
 |---|---|---|
 | `user-service` | Registers users (BCrypt), checks credentials, **issues** access and refresh tokens signed with the RS256 **private** key | [`AuthService`](../backend/user-service/src/main/java/ar/utn/edu/frba/ddsi/services/impl/AuthService.java), [`JwtService`](../backend/user-service/src/main/java/ar/utn/edu/frba/ddsi/services/JwtService.java) |
-| `api-gateway` | **Verifies** every access token with the **public** key, enforces the roles declared for each route and passes the user's identity to the services as headers | [`AuthenticationFilter`](../backend/api-gateway/src/main/java/ar/utn/edu/frba/ddsi/filters/AuthenticationFilter.java), [`routes.yml`](../backend/api-gateway/src/main/resources/routes.yml) |
+| `api-gateway` | **Verifies** every access token with the **public** key, enforces the roles declared for each route and passes the user's identity to the services as headers, which clients cannot forge | [`AuthenticationFilter`](../backend/api-gateway/src/main/java/ar/utn/edu/frba/ddsi/filters/AuthenticationFilter.java), [`StripIdentityHeadersFilter`](../backend/api-gateway/src/main/java/ar/utn/edu/frba/ddsi/filters/StripIdentityHeadersFilter.java), [`routes.yml`](../backend/api-gateway/src/main/resources/routes.yml) |
 | `frontend` (web server) | Keeps the tokens in the user's HTTP session, sends them to the gateway and **renews** them transparently when they expire | [`CustomAuthProvider`](../frontend/src/main/java/interfaz/grafica/ddsi/providers/CustomAuthProvider.java), [`WebApiCallerService`](../frontend/src/main/java/interfaz/grafica/ddsi/services/internal/WebApiCallerService.java) |
 
 ```mermaid
@@ -35,6 +35,7 @@ sequenceDiagram
 
     U->>W: Any page that needs data
     W->>G: GET /api/v1/... + Authorization: Bearer <access>
+    G->>G: Drop any X-User-Id / X-User-Name sent by the client
     G->>G: Verify RS256 signature, expiry, type = ACCESS, required roles
     G->>S: Forward with X-User-Id and X-User-Name
     S-->>U: Response, rendered as HTML by the web server
@@ -97,7 +98,15 @@ Responses:
 - **403** when the token is valid but has none of the required roles. The target service never sees the request.
 - On success the `X-User-Id` and `X-User-Name` headers are added, so services read the user from a header instead of decoding the JWT.
 
-The gateway also ships with six **self-test routes** (`/api/v1/test/public`, `/authenticated`, `/admin-only`, `/admin-and-contributor`, `/admin-or-contributor`, `/soft-auth`). Each one covers one rule and is forwarded to an endpoint that echoes the received headers, which makes it easy to check, for example, that `X-User-Id` is injected. They are exercised from the Postman collection ([testing.md](testing.md)).
+### Identity headers
+
+The services trust `X-User-Id` and `X-User-Name`, so only the gateway may set them. A global filter, [`StripIdentityHeadersFilter`](../backend/api-gateway/src/main/java/ar/utn/edu/frba/ddsi/filters/StripIdentityHeadersFilter.java), removes both headers from every incoming request before any route filter runs, and `AuthenticationFilter` adds them back only from a validated access token.
+
+This closes a gap found after the course: on optional-authentication routes, a request without a token used to reach the service with whatever `X-User-Id` the client sent, so it could submit an event or a deletion request as another user. A Postman regression test sends forged headers and checks that they never reach the service. For the same reason, in a deployment only the gateway should be reachable from outside.
+
+### Self-test routes
+
+The gateway also ships with six **self-test routes** (`/api/v1/test/public`, `/authenticated`, `/admin-only`, `/admin-and-contributor`, `/admin-or-contributor`, `/soft-auth`). Each one covers one rule and is forwarded to an endpoint that echoes the received headers, which makes it easy to check, for example, that `X-User-Id` is injected. The Postman collection asserts the expected status code for each rule, including the negative cases: no token, a malformed token, a refresh token used as an access token and the wrong role ([testing.md](testing.md)).
 
 ### Rules currently in use
 

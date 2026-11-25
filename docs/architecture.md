@@ -47,7 +47,7 @@ flowchart TB
 
 The browser only talks to the web server and only holds a session cookie. The web server renders pages with Thymeleaf. To get data it calls the gateway with the user's access token, which it keeps in the HTTP session ([`ServerAdapter`](../frontend/src/main/java/interfaz/grafica/ddsi/models/entitites/adapters/ServerAdapter.java), [`WebApiCallerService`](../frontend/src/main/java/interfaz/grafica/ddsi/services/internal/WebApiCallerService.java)).
 
-The gateway matches the request against [`routes.yml`](../backend/api-gateway/src/main/resources/routes.yml) by path and method. It strips the `/api/v1` prefix, applies the route's authentication rule and forwards the request to `lb://SERVICE-NAME`, which Eureka resolves. For authenticated requests it adds `X-User-Id` and `X-User-Name` headers, so services know who the user is without parsing tokens. The proxy source has no gateway routes: only the aggregator talks to it. See [authentication.md](authentication.md).
+The gateway matches the request against [`routes.yml`](../backend/api-gateway/src/main/resources/routes.yml) by path and method. It strips the `/api/v1` prefix, applies the route's authentication rule and forwards the request to `lb://SERVICE-NAME`, which Eureka resolves. For authenticated requests it adds `X-User-Id` and `X-User-Name` headers, so services know who the user is without parsing tokens; any copies of those headers sent by the client are removed first. The proxy source has no gateway routes: only the aggregator talks to it. See [authentication.md](authentication.md).
 
 ### 2. Data ingestion: sources push to the aggregator
 

@@ -32,7 +32,7 @@ Short architecture decision records (ADRs) for the main decisions. They are base
 
 **Context.** Before this change, the aggregator also acted as an entry point and forwarded requests to other services. Tokens had to be validated both there and in the target service.
 
-**Decision.** Add an API Gateway (Spring Cloud Gateway) as the single entry point, and Eureka for service discovery (`lb://SERVICE-NAME`). The gateway validates tokens and roles centrally, removes the `/api/v1` prefix and passes the user's identity as `X-User-Id` / `X-User-Name` headers.
+**Decision.** Add an API Gateway (Spring Cloud Gateway) as the single entry point, and Eureka for service discovery (`lb://SERVICE-NAME`). The gateway validates tokens and roles centrally, removes the `/api/v1` prefix and passes the user's identity as `X-User-Id` / `X-User-Name` headers. Only the gateway sets those headers: any copies sent by the client are dropped.
 
 **Alternatives.** Keeping the aggregator as the router, or validating tokens in every service. Both spread security logic and coupled unrelated responsibilities.
 
