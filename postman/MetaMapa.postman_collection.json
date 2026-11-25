@@ -778,13 +778,15 @@
 										"method": "POST",
 										"header": [],
 										"body": {
-											"mode": "raw",
-											"raw": "{\r\n  \"contributor\": \"juan.perez\",\r\n  \"title\": \"Incendio en zona norte\",\r\n  \"description\": \"Se reporta un incendio en un terreno baldío cercano a la ruta.\",\r\n  \"category\": \"INCENDIO\",\r\n  \"latitude\": -34.603722,\r\n  \"longitude\": -58.381592,\r\n  \"eventDate\": \"2025-05-15T14:30:00\"\r\n}",
-											"options": {
-												"raw": {
-													"language": "json"
+											"mode": "formdata",
+											"formdata": [
+												{
+													"key": "event",
+													"value": "{\n  \"title\": \"Incendio en zona norte\",\n  \"description\": \"Se reporta un incendio en un terreno baldío cercano a la ruta.\",\n  \"category\": \"INCENDIO\",\n  \"latitude\": -34.603722,\n  \"longitude\": -58.381592,\n  \"eventDate\": \"2025-05-15\"\n}",
+													"type": "text",
+													"contentType": "application/json"
 												}
-											}
+											]
 										},
 										"url": {
 											"raw": "{{dynamic-source-baseUrl}}/events",
@@ -907,7 +909,13 @@
 									"name": "Update Submission State",
 									"request": {
 										"method": "PUT",
-										"header": [],
+										"header": [
+											{
+												"key": "X-User-Id",
+												"value": "{{testUserId}}",
+												"type": "text"
+											}
+										],
 										"body": {
 											"mode": "raw",
 											"raw": "{\r\n  \"reviewer\": \"moderador.juana\", \r\n  \"state\": \"ACCEPTED\",\r\n  \"suggestion\": \"\"\r\n}",
@@ -945,7 +953,13 @@
 									"name": "Edit Event",
 									"request": {
 										"method": "PUT",
-										"header": [],
+										"header": [
+											{
+												"key": "X-User-Id",
+												"value": "{{testUserId}}",
+												"type": "text"
+											}
+										],
 										"body": {
 											"mode": "raw",
 											"raw": "{\r\n  \"contributor\": \"juan.perez\",\r\n  \"title\": \"Incendium controlado en depósito\",\r\n  \"description\": \"El incendio fue contenido por los bomberos, no hay heridos.\",\r\n  \"category\": \"INCENDIO\",\r\n  \"latitude\": -34.603722,\r\n  \"longitude\": -58.381592,\r\n  \"eventDate\": \"2025-05-15T22:00:00\"\r\n}",
@@ -1014,9 +1028,15 @@
 									"name": "Evaluate EditionRequest",
 									"request": {
 										"method": "PUT",
-										"header": [],
+										"header": [
+											{
+												"key": "X-User-Id",
+												"value": "{{testUserId}}",
+												"type": "text"
+											}
+										],
 										"url": {
-											"raw": "{{dynamic-source-baseUrl}}/edition-requests/:editionRequestID?newEvaluationStatus=APPROVED",
+											"raw": "{{dynamic-source-baseUrl}}/edition-requests/:editionRequestID",
 											"host": [
 												"{{dynamic-source-baseUrl}}"
 											],
@@ -1024,24 +1044,21 @@
 												"edition-requests",
 												":editionRequestID"
 											],
-											"query": [
-												{
-													"key": "newEvaluationStatus",
-													"value": "APPROVED"
-												},
-												{
-													"key": "newEvaluationStatus",
-													"value": "REJECTED",
-													"type": "text",
-													"disabled": true
-												}
-											],
 											"variable": [
 												{
 													"key": "editionRequestID",
 													"value": "1"
 												}
 											]
+										},
+										"body": {
+											"mode": "raw",
+											"raw": "\"APPROVED\"",
+											"options": {
+												"raw": {
+													"language": "json"
+												}
+											}
 										}
 									},
 									"response": []
@@ -1383,26 +1400,34 @@
 									"listen": "test",
 									"script": {
 										"exec": [
-											"// Parsear la respuesta como JSON\r",
-											"const jsonData = pm.response.json();\r",
-											"\r",
-											"// Test que exista accessToken\r",
-											"pm.test(\"Response contains accessToken\", function () {\r",
-											"    pm.expect(jsonData).to.have.property(\"accessToken\");\r",
-											"});\r",
-											"\r",
-											"// Test que exista refreshToken\r",
-											"pm.test(\"Response contains refreshToken\", function () {\r",
-											"    pm.expect(jsonData).to.have.property(\"refreshToken\");\r",
-											"});\r",
-											"\r",
-											"// Guardar los tokens en variables de entorno\r",
-											"pm.environment.set(\"AccessToken\", jsonData.accessToken);\r",
-											"pm.environment.set(\"RefreshToken\", jsonData.refreshToken);"
+											"pm.test(\"Status is 200\", function () {",
+											"    pm.response.to.have.status(200);",
+											"});",
+											"",
+											"const jsonData = pm.response.json();",
+											"",
+											"pm.test(\"Response contains accessToken\", function () {",
+											"    pm.expect(jsonData).to.have.property(\"accessToken\");",
+											"});",
+											"",
+											"pm.test(\"Response contains refreshToken\", function () {",
+											"    pm.expect(jsonData).to.have.property(\"refreshToken\");",
+											"});",
+											"",
+											"pm.test(\"A new user gets the CONTRIBUTOR role\", function () {",
+											"    pm.expect(jsonData.user.username).to.eql(pm.variables.get(\"testUsername\"));",
+											"    pm.expect(jsonData.user.roles).to.include(\"CONTRIBUTOR\");",
+											"});",
+											"",
+											"// Store the tokens (and the user id) for the next requests, only on success",
+											"if (pm.response.code === 200) {",
+											"    pm.environment.set(\"AccessToken\", jsonData.accessToken);",
+											"    pm.environment.set(\"RefreshToken\", jsonData.refreshToken);",
+											"    pm.environment.set(\"testUserId\", jsonData.user.id);",
+											"}"
 										],
 										"type": "text/javascript",
-										"packages": {},
-										"requests": {}
+										"packages": {}
 									}
 								}
 							],
@@ -1432,32 +1457,125 @@
 							"response": []
 						},
 						{
+							"name": "Register (existing username)",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"pm.test(\"An existing username returns 409 Conflict\", function () {",
+											"    pm.response.to.have.status(409);",
+											"});"
+										],
+										"type": "text/javascript",
+										"packages": {}
+									}
+								}
+							],
+							"request": {
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n    \"username\": \"{{testUsername}}\",\r\n    \"password\": \"{{testPassword}}\"\r\n}\r\n",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{APIGateway-baseUrl}}/auth/register",
+									"host": [
+										"{{APIGateway-baseUrl}}"
+									],
+									"path": [
+										"auth",
+										"register"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Login (wrong password)",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"pm.test(\"A wrong password returns 401 Unauthorized\", function () {",
+											"    pm.response.to.have.status(401);",
+											"});",
+											"",
+											"pm.test(\"No tokens are returned\", function () {",
+											"    pm.expect(pm.response.text()).to.not.include(\"accessToken\");",
+											"});"
+										],
+										"type": "text/javascript",
+										"packages": {}
+									}
+								}
+							],
+							"request": {
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n    \"username\": \"{{testUsername}}\",\n    \"password\": \"{{testPassword}}-wrong\"\n}\n",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{APIGateway-baseUrl}}/auth/login",
+									"host": [
+										"{{APIGateway-baseUrl}}"
+									],
+									"path": [
+										"auth",
+										"login"
+									]
+								}
+							},
+							"response": []
+						},
+						{
 							"name": "Login",
 							"event": [
 								{
 									"listen": "test",
 									"script": {
 										"exec": [
-											"// Parsear la respuesta como JSON\r",
-											"const jsonData = pm.response.json();\r",
-											"\r",
-											"// Test que exista accessToken\r",
-											"pm.test(\"Response contains accessToken\", function () {\r",
-											"    pm.expect(jsonData).to.have.property(\"accessToken\");\r",
-											"});\r",
-											"\r",
-											"// Test que exista refreshToken\r",
-											"pm.test(\"Response contains refreshToken\", function () {\r",
-											"    pm.expect(jsonData).to.have.property(\"refreshToken\");\r",
-											"});\r",
-											"\r",
-											"// Guardar los tokens en variables de entorno\r",
-											"pm.environment.set(\"AccessToken\", jsonData.accessToken);\r",
-											"pm.environment.set(\"RefreshToken\", jsonData.refreshToken);"
+											"pm.test(\"Status is 200\", function () {",
+											"    pm.response.to.have.status(200);",
+											"});",
+											"",
+											"const jsonData = pm.response.json();",
+											"",
+											"pm.test(\"Response contains accessToken\", function () {",
+											"    pm.expect(jsonData).to.have.property(\"accessToken\");",
+											"});",
+											"",
+											"pm.test(\"Response contains refreshToken\", function () {",
+											"    pm.expect(jsonData).to.have.property(\"refreshToken\");",
+											"});",
+											"",
+											"pm.test(\"The response identifies the logged-in user\", function () {",
+											"    pm.expect(jsonData.user.username).to.eql(pm.variables.get(\"testUsername\"));",
+											"});",
+											"",
+											"// Store the tokens (and the user id) for the next requests, only on success",
+											"if (pm.response.code === 200) {",
+											"    pm.environment.set(\"AccessToken\", jsonData.accessToken);",
+											"    pm.environment.set(\"RefreshToken\", jsonData.refreshToken);",
+											"    pm.environment.set(\"testUserId\", jsonData.user.id);",
+											"}"
 										],
 										"type": "text/javascript",
-										"packages": {},
-										"requests": {}
+										"packages": {}
 									}
 								}
 							],
@@ -1493,26 +1611,28 @@
 									"listen": "test",
 									"script": {
 										"exec": [
-											"// Parsear la respuesta como JSON\r",
-											"const jsonData = pm.response.json();\r",
-											"\r",
-											"// Test que exista accessToken\r",
-											"pm.test(\"Response contains accessToken\", function () {\r",
-											"    pm.expect(jsonData).to.have.property(\"accessToken\");\r",
-											"});\r",
-											"\r",
-											"// Test que exista refreshToken\r",
-											"pm.test(\"Response contains refreshToken\", function () {\r",
-											"    pm.expect(jsonData).to.have.property(\"refreshToken\");\r",
-											"});\r",
-											"\r",
-											"// Guardar los tokens en variables de entorno\r",
-											"pm.environment.set(\"AccessToken\", jsonData.accessToken);\r",
-											"pm.environment.set(\"RefreshToken\", jsonData.refreshToken);"
+											"pm.test(\"Status is 200\", function () {",
+											"    pm.response.to.have.status(200);",
+											"});",
+											"",
+											"const jsonData = pm.response.json();",
+											"",
+											"pm.test(\"Response contains accessToken\", function () {",
+											"    pm.expect(jsonData).to.have.property(\"accessToken\");",
+											"});",
+											"",
+											"pm.test(\"Response contains refreshToken\", function () {",
+											"    pm.expect(jsonData).to.have.property(\"refreshToken\");",
+											"});",
+											"",
+											"// Store the tokens (and the user id) for the next requests, only on success",
+											"if (pm.response.code === 200) {",
+											"    pm.environment.set(\"AccessToken\", jsonData.accessToken);",
+											"    pm.environment.set(\"RefreshToken\", jsonData.refreshToken);",
+											"}"
 										],
 										"type": "text/javascript",
-										"packages": {},
-										"requests": {}
+										"packages": {}
 									}
 								}
 							],
@@ -1541,8 +1661,51 @@
 								}
 							},
 							"response": []
+						},
+						{
+							"name": "RefreshToken (access token instead)",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"pm.test(\"An access token cannot be used to refresh (401)\", function () {",
+											"    pm.response.to.have.status(401);",
+											"});"
+										],
+										"type": "text/javascript",
+										"packages": {}
+									}
+								}
+							],
+							"request": {
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n    \"refreshToken\": \"{{AccessToken}}\"\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{APIGateway-baseUrl}}/auth/token/refresh",
+									"host": [
+										"{{APIGateway-baseUrl}}"
+									],
+									"path": [
+										"auth",
+										"token",
+										"refresh"
+									]
+								}
+							},
+							"response": []
 						}
-					]
+					],
+					"description": "Registers the test user, checks the error cases (existing username, wrong password, access token used to refresh) and stores AccessToken, RefreshToken and testUserId for the next requests."
 				},
 				{
 					"name": "Tests",
@@ -1587,7 +1750,32 @@
 									]
 								}
 							},
-							"response": []
+							"response": [],
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"pm.test(\"Public route: 200 without a token\", function () {",
+											"    pm.response.to.have.status(200);",
+											"});",
+											"",
+											"// The test routes echo the headers that reached the service (names compared in lower case)",
+											"const forwarded = {};",
+											"Object.entries(pm.response.json()).forEach(function ([name, value]) {",
+											"    forwarded[name.toLowerCase()] = value;",
+											"});",
+											"",
+											"pm.test(\"No identity headers reach the service\", function () {",
+											"    pm.expect(forwarded).to.not.have.property(\"x-user-id\");",
+											"    pm.expect(forwarded).to.not.have.property(\"x-user-name\");",
+											"});"
+										],
+										"type": "text/javascript",
+										"packages": {}
+									}
+								}
+							]
 						},
 						{
 							"name": "Authenticated",
@@ -1628,7 +1816,173 @@
 									]
 								}
 							},
-							"response": []
+							"response": [],
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"pm.test(\"Valid access token: 200\", function () {",
+											"    pm.response.to.have.status(200);",
+											"});",
+											"",
+											"// The test routes echo the headers that reached the service (names compared in lower case)",
+											"const forwarded = {};",
+											"Object.entries(pm.response.json()).forEach(function ([name, value]) {",
+											"    forwarded[name.toLowerCase()] = value;",
+											"});",
+											"",
+											"pm.test(\"The gateway forwards the identity from the token\", function () {",
+											"    pm.expect(forwarded[\"x-user-id\"]).to.eql(pm.variables.get(\"testUserId\"));",
+											"    pm.expect(forwarded[\"x-user-name\"]).to.eql(pm.variables.get(\"testUsername\"));",
+											"});"
+										],
+										"type": "text/javascript",
+										"packages": {}
+									}
+								}
+							]
+						},
+						{
+							"name": "Authenticated (no token)",
+							"protocolProfileBehavior": {
+								"disabledSystemHeaders": {
+									"connection": true,
+									"accept-encoding": true,
+									"accept": true,
+									"user-agent": true,
+									"host": true,
+									"content-length": true,
+									"content-type": true
+								}
+							},
+							"request": {
+								"method": "POST",
+								"header": [],
+								"url": {
+									"raw": "{{APIGateway-baseUrl}}/test/authenticated",
+									"host": [
+										"{{APIGateway-baseUrl}}"
+									],
+									"path": [
+										"test",
+										"authenticated"
+									]
+								}
+							},
+							"response": [],
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"pm.test(\"Missing token: 401 Unauthorized\", function () {",
+											"    pm.response.to.have.status(401);",
+											"});"
+										],
+										"type": "text/javascript",
+										"packages": {}
+									}
+								}
+							]
+						},
+						{
+							"name": "Authenticated (invalid token)",
+							"protocolProfileBehavior": {
+								"disabledSystemHeaders": {
+									"connection": true,
+									"accept-encoding": true,
+									"accept": true,
+									"user-agent": true,
+									"host": true,
+									"content-length": true,
+									"content-type": true
+								}
+							},
+							"request": {
+								"method": "POST",
+								"header": [
+									{
+										"key": "Authorization",
+										"value": "Bearer not-a-valid-jwt",
+										"type": "text"
+									}
+								],
+								"url": {
+									"raw": "{{APIGateway-baseUrl}}/test/authenticated",
+									"host": [
+										"{{APIGateway-baseUrl}}"
+									],
+									"path": [
+										"test",
+										"authenticated"
+									]
+								}
+							},
+							"response": [],
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"pm.test(\"Malformed token: 401 Unauthorized\", function () {",
+											"    pm.response.to.have.status(401);",
+											"});"
+										],
+										"type": "text/javascript",
+										"packages": {}
+									}
+								}
+							]
+						},
+						{
+							"name": "Authenticated (refresh token)",
+							"protocolProfileBehavior": {
+								"disabledSystemHeaders": {
+									"connection": true,
+									"accept-encoding": true,
+									"accept": true,
+									"user-agent": true,
+									"host": true,
+									"content-length": true,
+									"content-type": true
+								}
+							},
+							"request": {
+								"method": "POST",
+								"header": [
+									{
+										"key": "Authorization",
+										"value": "Bearer {{RefreshToken}}",
+										"type": "text"
+									}
+								],
+								"url": {
+									"raw": "{{APIGateway-baseUrl}}/test/authenticated",
+									"host": [
+										"{{APIGateway-baseUrl}}"
+									],
+									"path": [
+										"test",
+										"authenticated"
+									]
+								}
+							},
+							"response": [],
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"pm.test(\"A refresh token is not accepted as an access token (401)\", function () {",
+											"    pm.response.to.have.status(401);",
+											"});"
+										],
+										"type": "text/javascript",
+										"packages": {}
+									}
+								}
+							]
 						},
 						{
 							"name": "Admin Only",
@@ -1669,7 +2023,21 @@
 									]
 								}
 							},
-							"response": []
+							"response": [],
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"pm.test(\"CONTRIBUTOR token on an ADMIN route: 403 Forbidden\", function () {",
+											"    pm.response.to.have.status(403);",
+											"});"
+										],
+										"type": "text/javascript",
+										"packages": {}
+									}
+								}
+							]
 						},
 						{
 							"name": "Admin and Contributor",
@@ -1710,7 +2078,21 @@
 									]
 								}
 							},
-							"response": []
+							"response": [],
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"pm.test(\"ADMIN AND CONTRIBUTOR required, CONTRIBUTOR only: 403 Forbidden\", function () {",
+											"    pm.response.to.have.status(403);",
+											"});"
+										],
+										"type": "text/javascript",
+										"packages": {}
+									}
+								}
+							]
 						},
 						{
 							"name": "Admin or Contributor",
@@ -1751,7 +2133,32 @@
 									]
 								}
 							},
-							"response": []
+							"response": [],
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"pm.test(\"ADMIN OR CONTRIBUTOR: a CONTRIBUTOR token is enough (200)\", function () {",
+											"    pm.response.to.have.status(200);",
+											"});",
+											"",
+											"// The test routes echo the headers that reached the service (names compared in lower case)",
+											"const forwarded = {};",
+											"Object.entries(pm.response.json()).forEach(function ([name, value]) {",
+											"    forwarded[name.toLowerCase()] = value;",
+											"});",
+											"",
+											"pm.test(\"The gateway forwards the identity from the token\", function () {",
+											"    pm.expect(forwarded[\"x-user-id\"]).to.eql(pm.variables.get(\"testUserId\"));",
+											"    pm.expect(forwarded[\"x-user-name\"]).to.eql(pm.variables.get(\"testUsername\"));",
+											"});"
+										],
+										"type": "text/javascript",
+										"packages": {}
+									}
+								}
+							]
 						},
 						{
 							"name": "Soft Auth",
@@ -1793,9 +2200,170 @@
 									]
 								}
 							},
-							"response": []
+							"response": [],
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"pm.test(\"Optional authentication: anonymous request passes (200)\", function () {",
+											"    pm.response.to.have.status(200);",
+											"});",
+											"",
+											"// The test routes echo the headers that reached the service (names compared in lower case)",
+											"const forwarded = {};",
+											"Object.entries(pm.response.json()).forEach(function ([name, value]) {",
+											"    forwarded[name.toLowerCase()] = value;",
+											"});",
+											"",
+											"pm.test(\"No identity headers reach the service\", function () {",
+											"    pm.expect(forwarded).to.not.have.property(\"x-user-id\");",
+											"    pm.expect(forwarded).to.not.have.property(\"x-user-name\");",
+											"});"
+										],
+										"type": "text/javascript",
+										"packages": {}
+									}
+								}
+							]
+						},
+						{
+							"name": "Soft Auth (spoofed identity headers)",
+							"protocolProfileBehavior": {
+								"disabledSystemHeaders": {
+									"connection": true,
+									"accept-encoding": true,
+									"accept": true,
+									"user-agent": true,
+									"host": true,
+									"content-length": true,
+									"content-type": true
+								}
+							},
+							"request": {
+								"method": "POST",
+								"header": [
+									{
+										"key": "X-User-Id",
+										"value": "00000000-0000-0000-0000-000000000000",
+										"type": "text"
+									},
+									{
+										"key": "X-User-Name",
+										"value": "spoofed-user",
+										"type": "text"
+									}
+								],
+								"url": {
+									"raw": "{{APIGateway-baseUrl}}/test/soft-auth",
+									"host": [
+										"{{APIGateway-baseUrl}}"
+									],
+									"path": [
+										"test",
+										"soft-auth"
+									]
+								}
+							},
+							"response": [],
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"pm.test(\"Optional authentication without a token: 200\", function () {",
+											"    pm.response.to.have.status(200);",
+											"});",
+											"",
+											"// The test routes echo the headers that reached the service (names compared in lower case)",
+											"const forwarded = {};",
+											"Object.entries(pm.response.json()).forEach(function ([name, value]) {",
+											"    forwarded[name.toLowerCase()] = value;",
+											"});",
+											"",
+											"pm.test(\"Identity headers sent by the client are dropped\", function () {",
+											"    pm.expect(forwarded).to.not.have.property(\"x-user-id\");",
+											"    pm.expect(forwarded).to.not.have.property(\"x-user-name\");",
+											"});"
+										],
+										"type": "text/javascript",
+										"packages": {}
+									}
+								}
+							]
+						},
+						{
+							"name": "Soft Auth (token and spoofed headers)",
+							"protocolProfileBehavior": {
+								"disabledSystemHeaders": {
+									"connection": true,
+									"accept-encoding": true,
+									"accept": true,
+									"user-agent": true,
+									"host": true,
+									"content-length": true,
+									"content-type": true
+								}
+							},
+							"request": {
+								"method": "POST",
+								"header": [
+									{
+										"key": "Authorization",
+										"value": "Bearer {{AccessToken}}",
+										"type": "text"
+									},
+									{
+										"key": "X-User-Id",
+										"value": "00000000-0000-0000-0000-000000000000",
+										"type": "text"
+									},
+									{
+										"key": "X-User-Name",
+										"value": "spoofed-user",
+										"type": "text"
+									}
+								],
+								"url": {
+									"raw": "{{APIGateway-baseUrl}}/test/soft-auth",
+									"host": [
+										"{{APIGateway-baseUrl}}"
+									],
+									"path": [
+										"test",
+										"soft-auth"
+									]
+								}
+							},
+							"response": [],
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"pm.test(\"Optional authentication with a valid token: 200\", function () {",
+											"    pm.response.to.have.status(200);",
+											"});",
+											"",
+											"// The test routes echo the headers that reached the service (names compared in lower case)",
+											"const forwarded = {};",
+											"Object.entries(pm.response.json()).forEach(function ([name, value]) {",
+											"    forwarded[name.toLowerCase()] = value;",
+											"});",
+											"",
+											"pm.test(\"The identity comes from the token, not from the client headers\", function () {",
+											"    pm.expect(forwarded[\"x-user-id\"]).to.eql(pm.variables.get(\"testUserId\"));",
+											"    pm.expect(forwarded[\"x-user-name\"]).to.eql(pm.variables.get(\"testUsername\"));",
+											"});"
+										],
+										"type": "text/javascript",
+										"packages": {}
+									}
+								}
+							]
 						}
-					]
+					],
+					"description": "One request per route-security rule, with the expected status code asserted. Run it after Auth, with the freshly registered CONTRIBUTOR user: an ADMIN user would get 200 on the ADMIN routes. It also checks the negative cases (no token, malformed token, refresh token used as an access token) and that identity headers sent by the client never reach the services."
 				},
 				{
 					"name": "Create Event",
@@ -1803,13 +2371,15 @@
 						"method": "POST",
 						"header": [],
 						"body": {
-							"mode": "raw",
-							"raw": "{\r\n  \"contributor\": \"juan.perez\",\r\n  \"title\": \"Incendio en depósito\",\r\n  \"description\": \"Fuego en depósito de materiales inflamables, sin heridos reportados.\",\r\n  \"category\": \"INCENDIO\",\r\n  \"latitude\": -34.603722,\r\n  \"longitude\": -58.381592,\r\n  \"eventDate\": \"2025-05-15T14:30:00\"\r\n}",
-							"options": {
-								"raw": {
-									"language": "json"
+							"mode": "formdata",
+							"formdata": [
+								{
+									"key": "event",
+									"value": "{\n  \"title\": \"Incendio en depósito\",\n  \"description\": \"Fuego en depósito de materiales inflamables, sin heridos reportados.\",\n  \"category\": \"INCENDIO\",\n  \"latitude\": -34.603722,\n  \"longitude\": -58.381592,\n  \"eventDate\": \"2025-05-15\"\n}",
+									"type": "text",
+									"contentType": "application/json"
 								}
-							}
+							]
 						},
 						"url": {
 							"raw": "{{APIGateway-baseUrl}}/events",
@@ -1821,7 +2391,27 @@
 							]
 						}
 					},
-					"response": []
+					"response": [],
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Anonymous submission through the gateway: 200\", function () {",
+									"    pm.response.to.have.status(200);",
+									"});",
+									"",
+									"pm.test(\"The created event is returned\", function () {",
+									"    const event = pm.response.json();",
+									"    pm.expect(event.id).to.be.a(\"number\");",
+									"    pm.expect(event.title).to.eql(\"Incendio en depósito\");",
+									"});"
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					]
 				},
 				{
 					"name": "Events",
@@ -1890,10 +2480,28 @@
 							]
 						}
 					},
-					"response": []
+					"response": [],
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Public events feed: 200\", function () {",
+									"    pm.response.to.have.status(200);",
+									"});",
+									"",
+									"pm.test(\"The response is a page of events\", function () {",
+									"    pm.expect(pm.response.json()).to.have.property(\"content\");",
+									"});"
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					]
 				}
 			],
-			"description": "Requests through the API Gateway. Auth stores the tokens; Tests exercises each route-security rule (public, authenticated, admin only, admin AND contributor, admin OR contributor, optional authentication)."
+			"description": "Requests through the API Gateway, with automated assertions. Run the whole folder in order (Collection Runner or Newman) with a username that does not exist yet: Auth registers it and stores the tokens, Tests checks every route-security rule, and the last two requests submit an event anonymously and read the public feed."
 		},
 		{
 			"name": "Multimedia (currently not working)",
