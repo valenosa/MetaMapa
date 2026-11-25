@@ -21,8 +21,9 @@ public class CategoryService implements ICategoryService {
     this.categoryRepository = categoryRepository;
   }
 
+  // synchronized: evita que dos pushes simultáneos creen la misma categoría dos veces.
   @Override
-  public Category findOrCreate(String categoryName) {
+  public synchronized Category findOrCreate(String categoryName) {
 
     // Search for a matching category using fuzzy matching.
     String cleanName = cleanCategoryName(categoryName);

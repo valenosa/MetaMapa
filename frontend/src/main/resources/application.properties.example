@@ -5,8 +5,10 @@ logging.level.org.thymeleaf=DEBUG
 logging.level.org.thymeleaf.templateresolver=DEBUG
 logging.level.org.thymeleaf.TemplateEngine.CONFIG=DEBUG
 
-# File upload configuration (max file size)
+server.forward-headers-strategy=framework
+
+# Maximum upload size (keep it in line with static-source)
 spring.servlet.multipart.max-file-size=50MB
 
-# Backend services URLs
+# Every call to the back end goes through the API Gateway
 api.gateway.url=http://localhost:8086

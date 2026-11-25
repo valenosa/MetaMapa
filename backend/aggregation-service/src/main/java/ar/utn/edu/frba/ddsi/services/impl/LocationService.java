@@ -111,7 +111,10 @@ public class LocationService implements ILocationService {
     }
   }
 
-  private void persistNonPersisted(Set<Province> provinces, Set<Municipality> municipalities, Set<Department> departments) {
+  // synchronized: cada push de una fuente normaliza en su propio hilo. Sin el lock, dos pushes simultáneos
+  // podían no encontrar la misma provincia y crearla dos veces (después findByName devolvía 2 resultados).
+  // Alcanza con una sola instancia del agregador; con varias haría falta una restricción única en la base.
+  private synchronized void persistNonPersisted(Set<Province> provinces, Set<Municipality> municipalities, Set<Department> departments) {
     this.persistNonPersisted(
         provinces,
         provinceRepository::findByNameIn,

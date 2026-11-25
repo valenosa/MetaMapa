@@ -1,0 +1,601 @@
+{
+	"info": {
+		"name": "Dynamic source: edit scenario",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"description": "End-to-end moderation scenario for the dynamic source, with assertions. Run it with the Collection Runner or Newman on a fresh dynamic-source database (it uses the ids 1 to 3): creates three events, accepts two submissions and rejects one, requests edits and approves two edit requests. X-User-Id simulates the header injected by the gateway."
+	},
+	"item": [
+		{
+			"name": "Create Event 1",
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "X-User-Id",
+						"value": "{{testUserId}}",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "formdata",
+					"formdata": [
+						{
+							"key": "event",
+							"value": "{\n  \"title\": \"Vertido químico en el río\",\n  \"description\": \"Se observó espuma blanca en la orilla del río en la zona norte.\",\n  \"category\": \"CONTAMINACION\",\n  \"latitude\": -34.620101,\n  \"longitude\": -58.410087,\n  \"eventDate\": \"2025-05-12\"\n}",
+							"type": "text",
+							"contentType": "application/json"
+						}
+					]
+				},
+				"url": {
+					"raw": "{{dynamic-source-baseUrl}}/events",
+					"host": [
+						"{{dynamic-source-baseUrl}}"
+					],
+					"path": [
+						"events"
+					]
+				}
+			},
+			"response": [],
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Create Event 1: submitted (200)\", function () {",
+							"    pm.response.to.have.status(200);",
+							"});",
+							"",
+							"pm.test(\"The created event is returned\", function () {",
+							"    pm.expect(pm.response.json().id).to.be.a(\"number\");",
+							"});"
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				}
+			]
+		},
+		{
+			"name": "Create Event 2",
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "X-User-Id",
+						"value": "{{testUserId}}",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "formdata",
+					"formdata": [
+						{
+							"key": "event",
+							"value": "{\n  \"title\": \"Corte de calle por protesta\",\n  \"description\": \"Vecinos reclaman por falta de luz desde hace 48 horas.\",\n  \"category\": \"PROTESTA\",\n  \"latitude\": -34.58,\n  \"longitude\": -58.42,\n  \"eventDate\": \"2025-05-13\"\n}",
+							"type": "text",
+							"contentType": "application/json"
+						}
+					]
+				},
+				"url": {
+					"raw": "{{dynamic-source-baseUrl}}/events",
+					"host": [
+						"{{dynamic-source-baseUrl}}"
+					],
+					"path": [
+						"events"
+					]
+				}
+			},
+			"response": [],
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Create Event 2: submitted (200)\", function () {",
+							"    pm.response.to.have.status(200);",
+							"});",
+							"",
+							"pm.test(\"The created event is returned\", function () {",
+							"    pm.expect(pm.response.json().id).to.be.a(\"number\");",
+							"});"
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				}
+			]
+		},
+		{
+			"name": "Create Event 3",
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "X-User-Id",
+						"value": "{{testUserId}}",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "formdata",
+					"formdata": [
+						{
+							"key": "event",
+							"value": "{\n  \"title\": \"Incendio en zona norte\",\n  \"description\": \"Se reporta un incendio en un terreno baldío cercano a la ruta.\",\n  \"category\": \"INCENDIO\",\n  \"latitude\": -34.603722,\n  \"longitude\": -58.381592,\n  \"eventDate\": \"2025-05-15\"\n}",
+							"type": "text",
+							"contentType": "application/json"
+						}
+					]
+				},
+				"url": {
+					"raw": "{{dynamic-source-baseUrl}}/events",
+					"host": [
+						"{{dynamic-source-baseUrl}}"
+					],
+					"path": [
+						"events"
+					]
+				}
+			},
+			"response": [],
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Create Event 3: submitted (200)\", function () {",
+							"    pm.response.to.have.status(200);",
+							"});",
+							"",
+							"pm.test(\"The created event is returned\", function () {",
+							"    pm.expect(pm.response.json().id).to.be.a(\"number\");",
+							"});"
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				}
+			]
+		},
+		{
+			"name": "ACCEPT Submission 1",
+			"request": {
+				"method": "PUT",
+				"header": [
+					{
+						"key": "X-User-Id",
+						"value": "{{testUserId}}",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n  \"state\": \"ACCEPTED\",\r\n  \"suggestion\": \"\"\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{dynamic-source-baseUrl}}/submissions/:id",
+					"host": [
+						"{{dynamic-source-baseUrl}}"
+					],
+					"path": [
+						"submissions",
+						":id"
+					],
+					"variable": [
+						{
+							"key": "id",
+							"value": "1"
+						}
+					]
+				}
+			},
+			"response": [],
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"ACCEPT Submission 1: 200\", function () {",
+							"    pm.response.to.have.status(200);",
+							"});",
+							"",
+							"pm.test(\"Submission is ACCEPTED\", function () {",
+							"    pm.expect(pm.response.json().submissionState).to.eql(\"ACCEPTED\");",
+							"});"
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				}
+			]
+		},
+		{
+			"name": "ACCEPT Submission 2",
+			"request": {
+				"method": "PUT",
+				"header": [
+					{
+						"key": "X-User-Id",
+						"value": "{{testUserId}}",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n  \"state\": \"ACCEPTED\",\r\n  \"suggestion\": \"\"\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{dynamic-source-baseUrl}}/submissions/:id",
+					"host": [
+						"{{dynamic-source-baseUrl}}"
+					],
+					"path": [
+						"submissions",
+						":id"
+					],
+					"variable": [
+						{
+							"key": "id",
+							"value": "2"
+						}
+					]
+				}
+			},
+			"response": [],
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"ACCEPT Submission 2: 200\", function () {",
+							"    pm.response.to.have.status(200);",
+							"});",
+							"",
+							"pm.test(\"Submission is ACCEPTED\", function () {",
+							"    pm.expect(pm.response.json().submissionState).to.eql(\"ACCEPTED\");",
+							"});"
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				}
+			]
+		},
+		{
+			"name": "REJECT Submission 3",
+			"request": {
+				"method": "PUT",
+				"header": [
+					{
+						"key": "X-User-Id",
+						"value": "{{testUserId}}",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n  \"state\": \"REJECTED\",\r\n  \"suggestion\": \"\"\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{dynamic-source-baseUrl}}/submissions/:id",
+					"host": [
+						"{{dynamic-source-baseUrl}}"
+					],
+					"path": [
+						"submissions",
+						":id"
+					],
+					"variable": [
+						{
+							"key": "id",
+							"value": "3"
+						}
+					]
+				}
+			},
+			"response": [],
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"REJECT Submission 3: 200\", function () {",
+							"    pm.response.to.have.status(200);",
+							"});",
+							"",
+							"pm.test(\"Submission is REJECTED\", function () {",
+							"    pm.expect(pm.response.json().submissionState).to.eql(\"REJECTED\");",
+							"});"
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				}
+			]
+		},
+		{
+			"name": "Edit Event 1",
+			"request": {
+				"method": "PUT",
+				"header": [
+					{
+						"key": "X-User-Id",
+						"value": "{{testUserId}}",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n  \"title\": \"Cambio Location a Comuna 14\",\r\n  \"description\": \"Se observó espuma blanca en la orilla del río en la zona norte.\",\r\n  \"category\": \"test\",\r\n  \"latitude\": -34.580000,\r\n  \"longitude\": -58.420000,\r\n  \"eventDate\": \"2026-01-01\"\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{dynamic-source-baseUrl}}/events/:eventId",
+					"host": [
+						"{{dynamic-source-baseUrl}}"
+					],
+					"path": [
+						"events",
+						":eventId"
+					],
+					"variable": [
+						{
+							"key": "eventId",
+							"value": "1"
+						}
+					]
+				}
+			},
+			"response": [],
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Edit Event 1: edit request created (200)\", function () {",
+							"    pm.response.to.have.status(200);",
+							"});"
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				}
+			]
+		},
+		{
+			"name": "Edit Event 2",
+			"request": {
+				"method": "PUT",
+				"header": [
+					{
+						"key": "X-User-Id",
+						"value": "{{testUserId}}",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n  \"title\": \"Corte de calle por protesta\",\r\n  \"description\": \"Cambio Location (Antes Comuna 14) y desc\",\r\n  \"category\": \"PROTESTA\",\r\n  \"latitude\": -33.09129,\r\n  \"longitude\": -61.174263,\r\n  \"eventDate\": \"2025-05-13\"\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{dynamic-source-baseUrl}}/events/:eventId",
+					"host": [
+						"{{dynamic-source-baseUrl}}"
+					],
+					"path": [
+						"events",
+						":eventId"
+					],
+					"variable": [
+						{
+							"key": "eventId",
+							"value": "2"
+						}
+					]
+				}
+			},
+			"response": [],
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Edit Event 2: edit request created (200)\", function () {",
+							"    pm.response.to.have.status(200);",
+							"});"
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				}
+			]
+		},
+		{
+			"name": "Edit Event 3",
+			"request": {
+				"method": "PUT",
+				"header": [
+					{
+						"key": "X-User-Id",
+						"value": "{{testUserId}}",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n  \"title\": \"Incendio en zona norte\",\r\n  \"description\": \"Se reporta un incendio en un terreno baldío cercano a la ruta.\",\r\n  \"category\": \"INCENDIO\",\r\n  \"latitude\": -34.603722,\r\n  \"longitude\": -58.381592,\r\n  \"eventDate\": \"2026-01-01\"\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{dynamic-source-baseUrl}}/events/:eventId",
+					"host": [
+						"{{dynamic-source-baseUrl}}"
+					],
+					"path": [
+						"events",
+						":eventId"
+					],
+					"variable": [
+						{
+							"key": "eventId",
+							"value": "2"
+						}
+					]
+				}
+			},
+			"response": [],
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Edit Event 3: edit request created (200)\", function () {",
+							"    pm.response.to.have.status(200);",
+							"});"
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				}
+			]
+		},
+		{
+			"name": "APPROVE EditionRequest 1",
+			"request": {
+				"method": "PUT",
+				"header": [
+					{
+						"key": "X-User-Id",
+						"value": "{{testUserId}}",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "\"APPROVED\"",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{dynamic-source-baseUrl}}/edition-requests/:editionRequestID",
+					"host": [
+						"{{dynamic-source-baseUrl}}"
+					],
+					"path": [
+						"edition-requests",
+						":editionRequestID"
+					],
+					"variable": [
+						{
+							"key": "editionRequestID",
+							"value": "1"
+						}
+					]
+				}
+			},
+			"response": [],
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"APPROVE EditionRequest 1: 200\", function () {",
+							"    pm.response.to.have.status(200);",
+							"});"
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				}
+			]
+		},
+		{
+			"name": "APPROVE EditionRequest 2",
+			"request": {
+				"method": "PUT",
+				"header": [
+					{
+						"key": "X-User-Id",
+						"value": "{{testUserId}}",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "\"APPROVED\"",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{dynamic-source-baseUrl}}/edition-requests/:editionRequestID",
+					"host": [
+						"{{dynamic-source-baseUrl}}"
+					],
+					"path": [
+						"edition-requests",
+						":editionRequestID"
+					],
+					"variable": [
+						{
+							"key": "editionRequestID",
+							"value": "2"
+						}
+					]
+				}
+			},
+			"response": [],
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"APPROVE EditionRequest 2: 200\", function () {",
+							"    pm.response.to.have.status(200);",
+							"});"
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				}
+			]
+		}
+	]
+}

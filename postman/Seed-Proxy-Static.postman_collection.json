@@ -1,0 +1,164 @@
+{
+	"info": {
+		"name": "Seed: proxy + static",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"description": "Data-seeding flow meant for the Collection Runner: subscribes the aggregator to the proxy and static sources, creates a static source from a sample CSV file, imports it and creates two sample collections. Run it in order on a fresh environment."
+	},
+	"item": [
+		{
+			"name": "Proxy Client",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n  \"url\": \"{{proxy-source-baseUrl}}\",\r\n  \"type\": \"PROXY\"\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{aggregation-service-baseUrl}}/source-clients",
+					"host": [
+						"{{aggregation-service-baseUrl}}"
+					],
+					"path": [
+						"source-clients"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Static Client",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n  \"url\": \"{{static-source-baseUrl}}\",\r\n  \"type\": \"STATIC\"\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{aggregation-service-baseUrl}}/source-clients",
+					"host": [
+						"{{aggregation-service-baseUrl}}"
+					],
+					"path": [
+						"source-clients"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Create Source",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n  \"file_name\": \"5k_eventsTest.csv\",\r\n  \"import_strategy\": \"CSV\"\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{static-source-baseUrl}}/sources",
+					"host": [
+						"{{static-source-baseUrl}}"
+					],
+					"path": [
+						"sources"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Import Events",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"url": {
+					"raw": "{{static-source-baseUrl}}/sources/:id/import",
+					"host": [
+						"{{static-source-baseUrl}}"
+					],
+					"path": [
+						"sources",
+						":id",
+						"import"
+					],
+					"variable": [
+						{
+							"key": "id",
+							"value": "1"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Collection Proxy 2",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n  \"title\": \"Landslides\",\r\n  \"description\": \"Esta colección reúne los eventos relacionados con Derrumbes de cerros\",\r\n  \"conditions\": [\r\n    {\r\n      \"conditionType\": \"CATEGORY\",\r\n      \"conditionValue\": \"2\"\r\n    }\r\n  ],\r\n  \"sourceIds\": [1],\r\n  \"consensusType\": \"ABSOLUTE\"\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{aggregation-service-baseUrl}}/collections",
+					"host": [
+						"{{aggregation-service-baseUrl}}"
+					],
+					"path": [
+						"collections"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Collection Proxy 1",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n  \"title\": \"Hail storms\",\r\n  \"description\": \"Esta colección reúne los eventos relacionados con Presipitaciones de granizo registrados entre mayo de 2020 y junio de 2024.\",\r\n  \"conditions\": [\r\n    {\r\n      \"conditionType\": \"CATEGORY\",\r\n      \"conditionValue\": \"1\"\r\n    },\r\n    {\r\n      \"conditionType\": \"FROM_DATE\",\r\n      \"conditionValue\": \"2020-05-01T00:00:00\"\r\n    },\r\n    {\r\n      \"conditionType\": \"TO_DATE\",\r\n      \"conditionValue\": \"2024-06-01T23:59:59\"\r\n    }\r\n  ],\r\n  \"sourceIds\": [1],\r\n  \"consensusType\": \"ABSOLUTE\"\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{aggregation-service-baseUrl}}/collections",
+					"host": [
+						"{{aggregation-service-baseUrl}}"
+					],
+					"path": [
+						"collections"
+					]
+				}
+			},
+			"response": []
+		}
+	]
+}

@@ -1,4 +1,6 @@
+# --- Server ---
 server.port=8761
 
+# This service is the Eureka server: it does not register itself or fetch the registry.
 eureka.client.register-with-eureka=false
 eureka.client.fetch-registry=false

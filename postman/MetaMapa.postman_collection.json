@@ -1,0 +1,2766 @@
+{
+	"info": {
+		"name": "MetaMapa",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"description": "Requests for every MetaMapa service, organized by service and feature. Base URLs, tokens and test credentials come from the environment (see MetaMapa.local.postman_environment.example.json). Requests to the services ports call them directly; requests that use APIGateway-baseUrl go through the gateway and its route-security rules. Login, register and refresh store the returned tokens in AccessToken and RefreshToken."
+	},
+	"item": [
+		{
+			"name": "Aggregation-Service |MODULE|",
+			"item": [
+				{
+					"name": "Deletion Request",
+					"item": [
+						{
+							"name": "Deletion Request",
+							"request": {
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n  \"eventId\": 1,\r\n  \"argument\": \"This event should be removed because it repeats information that has already been reported in another event of the same collection and includes details that cannot be verified with any public source. The description mentions people who can be identified, which conflicts with the platform's policy of not exposing personal data, and the location does not match the area described in the text. Keeping it visible may mislead people who use the map to make decisions, so I ask the administrators to review it and, if they agree, to hide it from every collection while it stays stored internally, as the platform rules describe.\"\r\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{aggregation-service-baseUrl}}/deletion-request",
+									"host": [
+										"{{aggregation-service-baseUrl}}"
+									],
+									"path": [
+										"deletion-request"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Evaluate Deletion Request",
+							"request": {
+								"method": "PUT",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n    \"accepted\": true\r\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{aggregation-service-baseUrl}}/deletion-request/:id",
+									"host": [
+										"{{aggregation-service-baseUrl}}"
+									],
+									"path": [
+										"deletion-request",
+										":id"
+									],
+									"variable": [
+										{
+											"key": "id",
+											"value": ""
+										}
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Deletion Request",
+							"protocolProfileBehavior": {
+								"disableBodyPruning": true
+							},
+							"request": {
+								"method": "GET",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n    \"deletionRequestId\": 1,\r\n    \"evaluatorName\": \"admin\",\r\n    \"accepted\": true\r\n}"
+								},
+								"url": {
+									"raw": "{{aggregation-service-baseUrl}}/deletion-request?size=1",
+									"host": [
+										"{{aggregation-service-baseUrl}}"
+									],
+									"path": [
+										"deletion-request"
+									],
+									"query": [
+										{
+											"key": "page",
+											"value": "0",
+											"type": "text",
+											"disabled": true
+										},
+										{
+											"key": "size",
+											"value": "1",
+											"type": "text"
+										}
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Deletion Request",
+							"request": {
+								"auth": {
+									"type": "noauth"
+								},
+								"method": "POST",
+								"header": [
+									{
+										"key": "Authorization",
+										"value": "Bearer {{AccessToken}}",
+										"type": "text"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n  \"eventId\": 1,\r\n  \"argument\":\"spam spam spam spam spam spam spam spam spam spam spam spam spam spam spam spam spam spam spam spam spam spam spam spam spam spam spam spam spam spam spam spam spam spam spam spam spam spam spam spam spam spam spam spam spam spam spam spam spam spam spam spam spam spam spam spam spam spam spam spam spam spam spam spam spam spam spam spam spam spam spam spam spam spam spam spam spam spam spam spam spam spam spam spam spam spam spam spam spam spam spam spam spam spam spam spam spam spam spam spam spam spam spam spam spam spam spam spam spam spam \",\r\n  \"applicantName\": \"Maria.Lapaz\"\r\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{APIGateway-baseUrl}}/deletion-request",
+									"host": [
+										"{{APIGateway-baseUrl}}"
+									],
+									"path": [
+										"deletion-request"
+									]
+								}
+							},
+							"response": []
+						}
+					]
+				},
+				{
+					"name": "Collections",
+					"item": [
+						{
+							"name": "Update",
+							"item": [
+								{
+									"name": "Update Consensus",
+									"request": {
+										"method": "PATCH",
+										"header": [],
+										"body": {
+											"mode": "raw",
+											"raw": "{\r\n    \"consensusType\":\"MULTIPLE_MENTIONS\"\r\n}",
+											"options": {
+												"raw": {
+													"language": "json"
+												}
+											}
+										},
+										"url": {
+											"raw": "{{aggregation-service-baseUrl}}/collections/:handler/consensus",
+											"host": [
+												"{{aggregation-service-baseUrl}}"
+											],
+											"path": [
+												"collections",
+												":handler",
+												"consensus"
+											],
+											"variable": [
+												{
+													"key": "handler",
+													"value": ""
+												}
+											]
+										}
+									},
+									"response": []
+								},
+								{
+									"name": "Add Colection Source",
+									"request": {
+										"method": "POST",
+										"header": [],
+										"url": {
+											"raw": "{{aggregation-service-baseUrl}}/collections/:handler/sources/:sourceId",
+											"host": [
+												"{{aggregation-service-baseUrl}}"
+											],
+											"path": [
+												"collections",
+												":handler",
+												"sources",
+												":sourceId"
+											],
+											"variable": [
+												{
+													"key": "handler",
+													"value": ""
+												},
+												{
+													"key": "sourceId",
+													"value": ""
+												}
+											]
+										}
+									},
+									"response": []
+								},
+								{
+									"name": "Remove Colection Source",
+									"request": {
+										"method": "DELETE",
+										"header": [],
+										"url": {
+											"raw": "{{aggregation-service-baseUrl}}/collections/:handler/sources/:sourceId",
+											"host": [
+												"{{aggregation-service-baseUrl}}"
+											],
+											"path": [
+												"collections",
+												":handler",
+												"sources",
+												":sourceId"
+											],
+											"variable": [
+												{
+													"key": "handler",
+													"value": ""
+												},
+												{
+													"key": "sourceId",
+													"value": ""
+												}
+											]
+										}
+									},
+									"response": []
+								},
+								{
+									"name": "Update Collection",
+									"request": {
+										"method": "PUT",
+										"header": [],
+										"body": {
+											"mode": "raw",
+											"raw": "{\r\n  \"title\": \"TESTEO DESC LARGA\",\r\n  \"description\": \"Esta colección reúne los eventos relacionados con derrumbes de cerros registrados entre mayo de 2020 y junio de 2024.Esta colección reúne los eventos relacionados con derrumbes de cerros registrados entre mayo de 2020 y junio de 2024.Esta colección reúne los eventos relacionados con derrumbes de cerros registrados entre mayo de 2020 y junio de 2024.Esta colección reúne los eventos relacionados con derrumbes de cerros registrados entre mayo de 2020 y junio de 2024.Esta colección reúne los eventos relacionados con derrumbes de cerros registrados entre mayo de 2020 y junio de 2024.Esta colección reúne los eventos relacionados con derrumbes de cerros registrados entre mayo de 2020 y junio de 2024.Esta colección reúne los eventos relacionados con derrumbes de cerros registrados entre mayo de 2020 y junio de 2024.\",\r\n  \"conditions\": [\r\n    {\r\n      \"conditionType\": \"CATEGORY\",\r\n      \"conditionValue\": \"1\"\r\n    },\r\n    {\r\n      \"conditionType\": \"FROM_DATE\",\r\n      \"conditionValue\": \"2020-05-01T00:00:00\"\r\n    },\r\n    {\r\n      \"conditionType\": \"TO_DATE\",\r\n      \"conditionValue\": \"2024-06-01T23:59:59\"\r\n    }\r\n  ],\r\n  \"sourceIds\": [2],\r\n  \"consensusType\": \"ABSOLUTE\"\r\n}",
+											"options": {
+												"raw": {
+													"language": "json"
+												}
+											}
+										},
+										"url": {
+											"raw": "{{aggregation-service-baseUrl}}/collections/:handler",
+											"host": [
+												"{{aggregation-service-baseUrl}}"
+											],
+											"path": [
+												"collections",
+												":handler"
+											],
+											"variable": [
+												{
+													"key": "handler",
+													"value": "54596e98-e004-45f6-9534-ea3706f880e0"
+												}
+											]
+										}
+									},
+									"response": []
+								}
+							]
+						},
+						{
+							"name": "Collection By Handler",
+							"request": {
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "{{aggregation-service-baseUrl}}/collections/:handler",
+									"host": [
+										"{{aggregation-service-baseUrl}}"
+									],
+									"path": [
+										"collections",
+										":handler"
+									],
+									"variable": [
+										{
+											"key": "handler",
+											"value": ""
+										}
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Collection Events",
+							"request": {
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "{{aggregation-service-baseUrl}}/collections/:handler/events?curatedNavigation=true",
+									"host": [
+										"{{aggregation-service-baseUrl}}"
+									],
+									"path": [
+										"collections",
+										":handler",
+										"events"
+									],
+									"query": [
+										{
+											"key": "category_in",
+											"value": "2,1",
+											"disabled": true
+										},
+										{
+											"key": "source_in",
+											"value": "DYNAMIC,PROXY",
+											"type": "text",
+											"disabled": true
+										},
+										{
+											"key": "untilUploadDate",
+											"value": "",
+											"type": "text",
+											"disabled": true
+										},
+										{
+											"key": "fromUploadtDate",
+											"value": "",
+											"type": "text",
+											"disabled": true
+										},
+										{
+											"key": "untilEventDate",
+											"value": "2022-05-20T14:30:00",
+											"type": "text",
+											"disabled": true
+										},
+										{
+											"key": "fromEventDate",
+											"value": "2022-05-20T14:30:00",
+											"type": "text",
+											"disabled": true
+										},
+										{
+											"key": "curatedNavigation",
+											"value": "true"
+										},
+										{
+											"key": "page",
+											"value": "1",
+											"type": "text",
+											"disabled": true
+										},
+										{
+											"key": "size",
+											"value": "3",
+											"type": "text",
+											"disabled": true
+										}
+									],
+									"variable": [
+										{
+											"key": "handler",
+											"value": "adbfc5df-fa7a-48ce-b676-f5db00d47f54"
+										}
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Collection",
+							"request": {
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n  \"title\": \"Derrumbes de cerros\",\r\n  \"description\": \"Esta colección reúne los eventos relacionados con derrumbes de cerros registrados entre mayo de 2020 y junio de 2024.\",\r\n  \"conditions\": [\r\n    {\r\n      \"conditionType\": \"CATEGORY\",\r\n      \"conditionValue\": \"Derrumbe de cerro\"\r\n    },\r\n    {\r\n      \"conditionType\": \"FROM_DATE\",\r\n      \"conditionValue\": \"2020-05-01T00:00:00\"\r\n    },\r\n    {\r\n      \"conditionType\": \"TO_DATE\",\r\n      \"conditionValue\": \"2024-06-01T23:59:59\"\r\n    }\r\n  ],\r\n  \"sourceIds\": [1]\r\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{aggregation-service-baseUrl}}/collections",
+									"host": [
+										"{{aggregation-service-baseUrl}}"
+									],
+									"path": [
+										"collections"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Collections",
+							"request": {
+								"method": "DELETE",
+								"header": [],
+								"url": {
+									"raw": "{{aggregation-service-baseUrl}}/collections/:handler",
+									"host": [
+										"{{aggregation-service-baseUrl}}"
+									],
+									"path": [
+										"collections",
+										":handler"
+									],
+									"variable": [
+										{
+											"key": "handler",
+											"value": ""
+										}
+									]
+								}
+							},
+							"response": []
+						}
+					]
+				},
+				{
+					"name": "Source Clients",
+					"item": [
+						{
+							"name": "Static Client",
+							"request": {
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n  \"url\": \"{{static-source-baseUrl}}\",\r\n  \"type\": \"STATIC\"\r\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{aggregation-service-baseUrl}}/source-clients",
+									"host": [
+										"{{aggregation-service-baseUrl}}"
+									],
+									"path": [
+										"source-clients"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Dynamic Client",
+							"request": {
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n  \"url\": \"{{dynamic-source-baseUrl}}\",\r\n  \"type\": \"DYNAMIC\"\r\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{aggregation-service-baseUrl}}/source-clients",
+									"host": [
+										"{{aggregation-service-baseUrl}}"
+									],
+									"path": [
+										"source-clients"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Proxy Client",
+							"request": {
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n  \"url\": \"{{proxy-source-baseUrl}}\",\r\n  \"type\": \"PROXY\"\r\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{aggregation-service-baseUrl}}/source-clients",
+									"host": [
+										"{{aggregation-service-baseUrl}}"
+									],
+									"path": [
+										"source-clients"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Source Client",
+							"request": {
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "{{aggregation-service-baseUrl}}/source-clients",
+									"host": [
+										"{{aggregation-service-baseUrl}}"
+									],
+									"path": [
+										"source-clients"
+									]
+								}
+							},
+							"response": []
+						}
+					]
+				},
+				{
+					"name": "Collections",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{aggregation-service-baseUrl}}/collections?fromUpdatedDate=2025-10-07T13:42:07",
+							"host": [
+								"{{aggregation-service-baseUrl}}"
+							],
+							"path": [
+								"collections"
+							],
+							"query": [
+								{
+									"key": "fromUpdatedDate",
+									"value": "2025-10-07T13:42:07",
+									"type": "text"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Events",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{aggregation-service-baseUrl}}/events",
+							"host": [
+								"{{aggregation-service-baseUrl}}"
+							],
+							"path": [
+								"events"
+							],
+							"query": [
+								{
+									"key": "category_in",
+									"value": "1,37",
+									"disabled": true
+								},
+								{
+									"key": "province_in",
+									"value": "3, 11,24",
+									"disabled": true
+								},
+								{
+									"key": "source_in",
+									"value": "STATIC,PROXY",
+									"disabled": true
+								},
+								{
+									"key": "uploadDate_gt",
+									"value": "",
+									"disabled": true
+								},
+								{
+									"key": "uploadDate_lt",
+									"value": "",
+									"disabled": true
+								},
+								{
+									"key": "eventDate_gt",
+									"value": "2025-10-01",
+									"disabled": true
+								},
+								{
+									"key": "eventDate_lt",
+									"value": "",
+									"disabled": true
+								},
+								{
+									"key": "fromUpdatedDate",
+									"value": "2025-10-07T13:22:31",
+									"disabled": true
+								},
+								{
+									"key": "size",
+									"value": "100",
+									"disabled": true
+								},
+								{
+									"key": "page",
+									"value": "0",
+									"disabled": true
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Sources",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{aggregation-service-baseUrl}}/sources",
+							"host": [
+								"{{aggregation-service-baseUrl}}"
+							],
+							"path": [
+								"sources"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Categories",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{aggregation-service-baseUrl}}/categories?page&size",
+							"host": [
+								"{{aggregation-service-baseUrl}}"
+							],
+							"path": [
+								"categories"
+							],
+							"query": [
+								{
+									"key": "page",
+									"value": null,
+									"type": "text"
+								},
+								{
+									"key": "size",
+									"value": null,
+									"type": "text"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Categorie",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{aggregation-service-baseUrl}}/categories/:id",
+							"host": [
+								"{{aggregation-service-baseUrl}}"
+							],
+							"path": [
+								"categories",
+								":id"
+							],
+							"variable": [
+								{
+									"key": "id",
+									"value": "1"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Provinces",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{aggregation-service-baseUrl}}/locations/provinces",
+							"host": [
+								"{{aggregation-service-baseUrl}}"
+							],
+							"path": [
+								"locations",
+								"provinces"
+							],
+							"query": [
+								{
+									"key": "page",
+									"value": null,
+									"type": "text",
+									"disabled": true
+								},
+								{
+									"key": "size",
+									"value": null,
+									"type": "text",
+									"disabled": true
+								}
+							]
+						}
+					},
+					"response": []
+				}
+			],
+			"description": "Aggregation service called directly (no gateway): collections, deletion requests, source subscriptions (source-clients) and read endpoints."
+		},
+		{
+			"name": "Sources |MODULES|",
+			"item": [
+				{
+					"name": "Dynamic-source",
+					"item": [
+						{
+							"name": "Events",
+							"item": [
+								{
+									"name": "User Events",
+									"protocolProfileBehavior": {
+										"disableBodyPruning": true
+									},
+									"request": {
+										"method": "GET",
+										"header": [
+											{
+												"key": "X-User-Id",
+												"value": "{{testUserId}}",
+												"type": "text"
+											}
+										],
+										"body": {
+											"mode": "raw",
+											"raw": ""
+										},
+										"url": {
+											"raw": "{{dynamic-source-baseUrl}}/users/me/events",
+											"host": [
+												"{{dynamic-source-baseUrl}}"
+											],
+											"path": [
+												"users",
+												"me",
+												"events"
+											]
+										}
+									},
+									"response": []
+								},
+								{
+									"name": "Create Event",
+									"request": {
+										"method": "POST",
+										"header": [],
+										"body": {
+											"mode": "formdata",
+											"formdata": [
+												{
+													"key": "event",
+													"value": "{\n  \"title\": \"Incendio en zona norte\",\n  \"description\": \"Se reporta un incendio en un terreno baldío cercano a la ruta.\",\n  \"category\": \"INCENDIO\",\n  \"latitude\": -34.603722,\n  \"longitude\": -58.381592,\n  \"eventDate\": \"2025-05-15\"\n}",
+													"type": "text",
+													"contentType": "application/json"
+												}
+											]
+										},
+										"url": {
+											"raw": "{{dynamic-source-baseUrl}}/events",
+											"host": [
+												"{{dynamic-source-baseUrl}}"
+											],
+											"path": [
+												"events"
+											]
+										}
+									},
+									"response": []
+								},
+								{
+									"name": "Delete Event",
+									"request": {
+										"method": "DELETE",
+										"header": [],
+										"body": {
+											"mode": "raw",
+											"raw": ""
+										},
+										"url": {
+											"raw": "{{dynamic-source-baseUrl}}/events/:eventId",
+											"host": [
+												"{{dynamic-source-baseUrl}}"
+											],
+											"path": [
+												"events",
+												":eventId"
+											],
+											"variable": [
+												{
+													"key": "eventId",
+													"value": "1"
+												}
+											]
+										}
+									},
+									"response": []
+								},
+								{
+									"name": "Event Image ??",
+									"protocolProfileBehavior": {
+										"disableBodyPruning": true
+									},
+									"request": {
+										"method": "GET",
+										"header": [],
+										"body": {
+											"mode": "raw",
+											"raw": "{\r\n  \"contributor\": \"juan.perez\",\r\n  \"title\": \"Incendio en zona norte\",\r\n  \"description\": \"Se reporta un incendio en un terreno baldío cercano a la ruta.\",\r\n  \"category\": \"INSENDIO\",\r\n  \"latitude\": -34.603722,\r\n  \"longitude\": -58.381592,\r\n  \"eventDate\": \"2025-05-15T14:30:00\"\r\n}"
+										},
+										"url": {
+											"raw": "{{dynamic-source-baseUrl}}/events/:eventId/images/:imageName",
+											"host": [
+												"{{dynamic-source-baseUrl}}"
+											],
+											"path": [
+												"events",
+												":eventId",
+												"images",
+												":imageName"
+											],
+											"variable": [
+												{
+													"key": "eventId",
+													"value": "1"
+												},
+												{
+													"key": "imageName",
+													"value": "282da6c8-7c4f-4c2c-a9b0-901da5a62941"
+												}
+											]
+										}
+									},
+									"response": []
+								}
+							]
+						},
+						{
+							"name": "SubmissionRequests",
+							"item": [
+								{
+									"name": "Submissions",
+									"request": {
+										"method": "GET",
+										"header": [],
+										"url": {
+											"raw": "{{dynamic-source-baseUrl}}/submissions?state=ACCEPTED",
+											"host": [
+												"{{dynamic-source-baseUrl}}"
+											],
+											"path": [
+												"submissions"
+											],
+											"query": [
+												{
+													"key": "state",
+													"value": "ACCEPTED"
+												},
+												{
+													"key": "page",
+													"value": "0",
+													"type": "text",
+													"disabled": true
+												},
+												{
+													"key": "size",
+													"value": "1",
+													"type": "text",
+													"disabled": true
+												}
+											]
+										}
+									},
+									"response": []
+								},
+								{
+									"name": "Update Submission State",
+									"request": {
+										"method": "PUT",
+										"header": [
+											{
+												"key": "X-User-Id",
+												"value": "{{testUserId}}",
+												"type": "text"
+											}
+										],
+										"body": {
+											"mode": "raw",
+											"raw": "{\r\n  \"reviewer\": \"moderador.juana\", \r\n  \"state\": \"ACCEPTED\",\r\n  \"suggestion\": \"\"\r\n}",
+											"options": {
+												"raw": {
+													"language": "json"
+												}
+											}
+										},
+										"url": {
+											"raw": "{{dynamic-source-baseUrl}}/submissions/:id",
+											"host": [
+												"{{dynamic-source-baseUrl}}"
+											],
+											"path": [
+												"submissions",
+												":id"
+											],
+											"variable": [
+												{
+													"key": "id",
+													"value": "1"
+												}
+											]
+										}
+									},
+									"response": []
+								}
+							]
+						},
+						{
+							"name": "EditionRequest",
+							"item": [
+								{
+									"name": "Edit Event",
+									"request": {
+										"method": "PUT",
+										"header": [
+											{
+												"key": "X-User-Id",
+												"value": "{{testUserId}}",
+												"type": "text"
+											}
+										],
+										"body": {
+											"mode": "raw",
+											"raw": "{\r\n  \"contributor\": \"juan.perez\",\r\n  \"title\": \"Incendium controlado en depósito\",\r\n  \"description\": \"El incendio fue contenido por los bomberos, no hay heridos.\",\r\n  \"category\": \"INCENDIO\",\r\n  \"latitude\": -34.603722,\r\n  \"longitude\": -58.381592,\r\n  \"eventDate\": \"2025-05-15T22:00:00\"\r\n}",
+											"options": {
+												"raw": {
+													"language": "json"
+												}
+											}
+										},
+										"url": {
+											"raw": "{{dynamic-source-baseUrl}}/events/:eventId",
+											"host": [
+												"{{dynamic-source-baseUrl}}"
+											],
+											"path": [
+												"events",
+												":eventId"
+											],
+											"variable": [
+												{
+													"key": "eventId",
+													"value": "1"
+												}
+											]
+										}
+									},
+									"response": []
+								},
+								{
+									"name": "EditionRequests",
+									"request": {
+										"method": "GET",
+										"header": [],
+										"url": {
+											"raw": "{{dynamic-source-baseUrl}}/edition-requests",
+											"host": [
+												"{{dynamic-source-baseUrl}}"
+											],
+											"path": [
+												"edition-requests"
+											],
+											"query": [
+												{
+													"key": "status",
+													"value": "APPROVED",
+													"disabled": true
+												},
+												{
+													"key": "page",
+													"value": "0",
+													"type": "text",
+													"disabled": true
+												},
+												{
+													"key": "size",
+													"value": "1",
+													"type": "text",
+													"disabled": true
+												}
+											]
+										}
+									},
+									"response": []
+								},
+								{
+									"name": "Evaluate EditionRequest",
+									"request": {
+										"method": "PUT",
+										"header": [
+											{
+												"key": "X-User-Id",
+												"value": "{{testUserId}}",
+												"type": "text"
+											}
+										],
+										"url": {
+											"raw": "{{dynamic-source-baseUrl}}/edition-requests/:editionRequestID",
+											"host": [
+												"{{dynamic-source-baseUrl}}"
+											],
+											"path": [
+												"edition-requests",
+												":editionRequestID"
+											],
+											"variable": [
+												{
+													"key": "editionRequestID",
+													"value": "1"
+												}
+											]
+										},
+										"body": {
+											"mode": "raw",
+											"raw": "\"APPROVED\"",
+											"options": {
+												"raw": {
+													"language": "json"
+												}
+											}
+										}
+									},
+									"response": []
+								}
+							]
+						}
+					]
+				},
+				{
+					"name": "Static-source",
+					"item": [
+						{
+							"name": "Create Source",
+							"request": {
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n  \"file_name\": \"sample_CSVtest_1.csv\",\r\n  \"import_strategy\": \"CSV\"\r\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{static-source-baseUrl}}/sources",
+									"host": [
+										"{{static-source-baseUrl}}"
+									],
+									"path": [
+										"sources"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "All Source",
+							"request": {
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "{{static-source-baseUrl}}/sources",
+									"host": [
+										"{{static-source-baseUrl}}"
+									],
+									"path": [
+										"sources"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Import Events",
+							"request": {
+								"method": "POST",
+								"header": [],
+								"url": {
+									"raw": "{{static-source-baseUrl}}/sources/:id/import",
+									"host": [
+										"{{static-source-baseUrl}}"
+									],
+									"path": [
+										"sources",
+										":id",
+										"import"
+									],
+									"variable": [
+										{
+											"key": "id",
+											"value": "1"
+										}
+									]
+								}
+							},
+							"response": []
+						}
+					]
+				},
+				{
+					"name": "Proxy-source",
+					"item": [
+						{
+							"name": "All Sources",
+							"request": {
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "{{proxy-source-baseUrl}}/sources",
+									"host": [
+										"{{proxy-source-baseUrl}}"
+									],
+									"path": [
+										"sources"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Create Source",
+							"request": {
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n  \"baseUrl\": \"http://localhost:8080\",\r\n  \"type\": \"METAMAPA\"\r\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{proxy-source-baseUrl}}/sources",
+									"host": [
+										"{{proxy-source-baseUrl}}"
+									],
+									"path": [
+										"sources"
+									]
+								}
+							},
+							"response": []
+						}
+					]
+				},
+				{
+					"name": "Events",
+					"request": {
+						"method": "DELETE",
+						"header": [],
+						"url": {
+							"raw": "{{static-source-baseUrl}}/events/:id",
+							"host": [
+								"{{static-source-baseUrl}}"
+							],
+							"path": [
+								"events",
+								":id"
+							],
+							"variable": [
+								{
+									"key": "id",
+									"value": "2"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "All Events",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{proxy-source-baseUrl}}/events",
+							"host": [
+								"{{proxy-source-baseUrl}}"
+							],
+							"path": [
+								"events"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Source Events",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{proxy-source-baseUrl}}/events",
+							"host": [
+								"{{proxy-source-baseUrl}}"
+							],
+							"path": [
+								"events"
+							]
+						}
+					},
+					"response": []
+				}
+			],
+			"description": "Static, dynamic and proxy sources called directly. Requests that need a user simulate the gateway by sending the X-User-Id header."
+		},
+		{
+			"name": "Statistics-Service |MODULE|",
+			"item": [
+				{
+					"name": "Top Category",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{statistics-service-baseUrl}}/statistics/categories/top",
+							"host": [
+								"{{statistics-service-baseUrl}}"
+							],
+							"path": [
+								"statistics",
+								"categories",
+								"top"
+							],
+							"query": [
+								{
+									"key": "count",
+									"value": "5",
+									"type": "text",
+									"disabled": true
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Top Province on Collection",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{statistics-service-baseUrl}}/statistics/collection/:handler/provinces/top",
+							"host": [
+								"{{statistics-service-baseUrl}}"
+							],
+							"path": [
+								"statistics",
+								"collection",
+								":handler",
+								"provinces",
+								"top"
+							],
+							"query": [
+								{
+									"key": "count",
+									"value": "5",
+									"type": "text",
+									"disabled": true
+								}
+							],
+							"variable": [
+								{
+									"key": "handler",
+									"value": ""
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Top Province By Category",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{statistics-service-baseUrl}}/statistics/category/:id/provinces/top",
+							"host": [
+								"{{statistics-service-baseUrl}}"
+							],
+							"path": [
+								"statistics",
+								"category",
+								":id",
+								"provinces",
+								"top"
+							],
+							"query": [
+								{
+									"key": "count",
+									"value": "5",
+									"type": "text",
+									"disabled": true
+								}
+							],
+							"variable": [
+								{
+									"key": "id",
+									"value": "5"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Category Top Hour",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{statistics-service-baseUrl}}/statistics/category/:id/busiest-hours/top",
+							"host": [
+								"{{statistics-service-baseUrl}}"
+							],
+							"path": [
+								"statistics",
+								"category",
+								":id",
+								"busiest-hours",
+								"top"
+							],
+							"query": [
+								{
+									"key": "count",
+									"value": "5",
+									"type": "text",
+									"disabled": true
+								}
+							],
+							"variable": [
+								{
+									"key": "id",
+									"value": "1"
+								}
+							]
+						}
+					},
+					"response": []
+				}
+			],
+			"description": "Statistics endpoints called directly."
+		},
+		{
+			"name": "API Gateway",
+			"item": [
+				{
+					"name": "Auth",
+					"item": [
+						{
+							"name": "Register",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"pm.test(\"Status is 200\", function () {",
+											"    pm.response.to.have.status(200);",
+											"});",
+											"",
+											"const jsonData = pm.response.json();",
+											"",
+											"pm.test(\"Response contains accessToken\", function () {",
+											"    pm.expect(jsonData).to.have.property(\"accessToken\");",
+											"});",
+											"",
+											"pm.test(\"Response contains refreshToken\", function () {",
+											"    pm.expect(jsonData).to.have.property(\"refreshToken\");",
+											"});",
+											"",
+											"pm.test(\"A new user gets the CONTRIBUTOR role\", function () {",
+											"    pm.expect(jsonData.user.username).to.eql(pm.variables.get(\"testUsername\"));",
+											"    pm.expect(jsonData.user.roles).to.include(\"CONTRIBUTOR\");",
+											"});",
+											"",
+											"// Store the tokens (and the user id) for the next requests, only on success",
+											"if (pm.response.code === 200) {",
+											"    pm.environment.set(\"AccessToken\", jsonData.accessToken);",
+											"    pm.environment.set(\"RefreshToken\", jsonData.refreshToken);",
+											"    pm.environment.set(\"testUserId\", jsonData.user.id);",
+											"}"
+										],
+										"type": "text/javascript",
+										"packages": {}
+									}
+								}
+							],
+							"request": {
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n    \"username\": \"{{testUsername}}\",\r\n    \"password\": \"{{testPassword}}\"\r\n}\r\n",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{APIGateway-baseUrl}}/auth/register",
+									"host": [
+										"{{APIGateway-baseUrl}}"
+									],
+									"path": [
+										"auth",
+										"register"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Register (existing username)",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"pm.test(\"An existing username returns 409 Conflict\", function () {",
+											"    pm.response.to.have.status(409);",
+											"});"
+										],
+										"type": "text/javascript",
+										"packages": {}
+									}
+								}
+							],
+							"request": {
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n    \"username\": \"{{testUsername}}\",\r\n    \"password\": \"{{testPassword}}\"\r\n}\r\n",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{APIGateway-baseUrl}}/auth/register",
+									"host": [
+										"{{APIGateway-baseUrl}}"
+									],
+									"path": [
+										"auth",
+										"register"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Login (wrong password)",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"pm.test(\"A wrong password returns 401 Unauthorized\", function () {",
+											"    pm.response.to.have.status(401);",
+											"});",
+											"",
+											"pm.test(\"No tokens are returned\", function () {",
+											"    pm.expect(pm.response.text()).to.not.include(\"accessToken\");",
+											"});"
+										],
+										"type": "text/javascript",
+										"packages": {}
+									}
+								}
+							],
+							"request": {
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n    \"username\": \"{{testUsername}}\",\n    \"password\": \"{{testPassword}}-wrong\"\n}\n",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{APIGateway-baseUrl}}/auth/login",
+									"host": [
+										"{{APIGateway-baseUrl}}"
+									],
+									"path": [
+										"auth",
+										"login"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Login",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"pm.test(\"Status is 200\", function () {",
+											"    pm.response.to.have.status(200);",
+											"});",
+											"",
+											"const jsonData = pm.response.json();",
+											"",
+											"pm.test(\"Response contains accessToken\", function () {",
+											"    pm.expect(jsonData).to.have.property(\"accessToken\");",
+											"});",
+											"",
+											"pm.test(\"Response contains refreshToken\", function () {",
+											"    pm.expect(jsonData).to.have.property(\"refreshToken\");",
+											"});",
+											"",
+											"pm.test(\"The response identifies the logged-in user\", function () {",
+											"    pm.expect(jsonData.user.username).to.eql(pm.variables.get(\"testUsername\"));",
+											"});",
+											"",
+											"// Store the tokens (and the user id) for the next requests, only on success",
+											"if (pm.response.code === 200) {",
+											"    pm.environment.set(\"AccessToken\", jsonData.accessToken);",
+											"    pm.environment.set(\"RefreshToken\", jsonData.refreshToken);",
+											"    pm.environment.set(\"testUserId\", jsonData.user.id);",
+											"}"
+										],
+										"type": "text/javascript",
+										"packages": {}
+									}
+								}
+							],
+							"request": {
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n    \"username\": \"{{testUsername}}\",\r\n    \"password\": \"{{testPassword}}\"\r\n}\r\n",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{APIGateway-baseUrl}}/auth/login",
+									"host": [
+										"{{APIGateway-baseUrl}}"
+									],
+									"path": [
+										"auth",
+										"login"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "RefreshToken",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"pm.test(\"Status is 200\", function () {",
+											"    pm.response.to.have.status(200);",
+											"});",
+											"",
+											"const jsonData = pm.response.json();",
+											"",
+											"pm.test(\"Response contains accessToken\", function () {",
+											"    pm.expect(jsonData).to.have.property(\"accessToken\");",
+											"});",
+											"",
+											"pm.test(\"Response contains refreshToken\", function () {",
+											"    pm.expect(jsonData).to.have.property(\"refreshToken\");",
+											"});",
+											"",
+											"// Store the tokens (and the user id) for the next requests, only on success",
+											"if (pm.response.code === 200) {",
+											"    pm.environment.set(\"AccessToken\", jsonData.accessToken);",
+											"    pm.environment.set(\"RefreshToken\", jsonData.refreshToken);",
+											"}"
+										],
+										"type": "text/javascript",
+										"packages": {}
+									}
+								}
+							],
+							"request": {
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n    \"refreshToken\": \"{{RefreshToken}}\" \r\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{APIGateway-baseUrl}}/auth/token/refresh",
+									"host": [
+										"{{APIGateway-baseUrl}}"
+									],
+									"path": [
+										"auth",
+										"token",
+										"refresh"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "RefreshToken (access token instead)",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"pm.test(\"An access token cannot be used to refresh (401)\", function () {",
+											"    pm.response.to.have.status(401);",
+											"});"
+										],
+										"type": "text/javascript",
+										"packages": {}
+									}
+								}
+							],
+							"request": {
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n    \"refreshToken\": \"{{AccessToken}}\"\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{APIGateway-baseUrl}}/auth/token/refresh",
+									"host": [
+										"{{APIGateway-baseUrl}}"
+									],
+									"path": [
+										"auth",
+										"token",
+										"refresh"
+									]
+								}
+							},
+							"response": []
+						}
+					],
+					"description": "Registers the test user, checks the error cases (existing username, wrong password, access token used to refresh) and stores AccessToken, RefreshToken and testUserId for the next requests."
+				},
+				{
+					"name": "Tests",
+					"item": [
+						{
+							"name": "Public",
+							"protocolProfileBehavior": {
+								"disabledSystemHeaders": {
+									"connection": true,
+									"accept-encoding": true,
+									"accept": true,
+									"user-agent": true,
+									"host": true,
+									"content-length": true,
+									"content-type": true
+								}
+							},
+							"request": {
+								"method": "POST",
+								"header": [
+									{
+										"key": "Authorization",
+										"value": "Bearer {{AccessToken}}",
+										"type": "text",
+										"disabled": true
+									},
+									{
+										"key": "",
+										"value": "",
+										"type": "text",
+										"disabled": true
+									}
+								],
+								"url": {
+									"raw": "{{APIGateway-baseUrl}}/test/public",
+									"host": [
+										"{{APIGateway-baseUrl}}"
+									],
+									"path": [
+										"test",
+										"public"
+									]
+								}
+							},
+							"response": [],
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"pm.test(\"Public route: 200 without a token\", function () {",
+											"    pm.response.to.have.status(200);",
+											"});",
+											"",
+											"// The test routes echo the headers that reached the service (names compared in lower case)",
+											"const forwarded = {};",
+											"Object.entries(pm.response.json()).forEach(function ([name, value]) {",
+											"    forwarded[name.toLowerCase()] = value;",
+											"});",
+											"",
+											"pm.test(\"No identity headers reach the service\", function () {",
+											"    pm.expect(forwarded).to.not.have.property(\"x-user-id\");",
+											"    pm.expect(forwarded).to.not.have.property(\"x-user-name\");",
+											"});"
+										],
+										"type": "text/javascript",
+										"packages": {}
+									}
+								}
+							]
+						},
+						{
+							"name": "Authenticated",
+							"protocolProfileBehavior": {
+								"disabledSystemHeaders": {
+									"connection": true,
+									"accept-encoding": true,
+									"accept": true,
+									"user-agent": true,
+									"host": true,
+									"content-length": true,
+									"content-type": true
+								}
+							},
+							"request": {
+								"method": "POST",
+								"header": [
+									{
+										"key": "Authorization",
+										"value": "Bearer {{AccessToken}}",
+										"type": "text"
+									},
+									{
+										"key": "",
+										"value": "",
+										"type": "text",
+										"disabled": true
+									}
+								],
+								"url": {
+									"raw": "{{APIGateway-baseUrl}}/test/authenticated",
+									"host": [
+										"{{APIGateway-baseUrl}}"
+									],
+									"path": [
+										"test",
+										"authenticated"
+									]
+								}
+							},
+							"response": [],
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"pm.test(\"Valid access token: 200\", function () {",
+											"    pm.response.to.have.status(200);",
+											"});",
+											"",
+											"// The test routes echo the headers that reached the service (names compared in lower case)",
+											"const forwarded = {};",
+											"Object.entries(pm.response.json()).forEach(function ([name, value]) {",
+											"    forwarded[name.toLowerCase()] = value;",
+											"});",
+											"",
+											"pm.test(\"The gateway forwards the identity from the token\", function () {",
+											"    pm.expect(forwarded[\"x-user-id\"]).to.eql(pm.variables.get(\"testUserId\"));",
+											"    pm.expect(forwarded[\"x-user-name\"]).to.eql(pm.variables.get(\"testUsername\"));",
+											"});"
+										],
+										"type": "text/javascript",
+										"packages": {}
+									}
+								}
+							]
+						},
+						{
+							"name": "Authenticated (no token)",
+							"protocolProfileBehavior": {
+								"disabledSystemHeaders": {
+									"connection": true,
+									"accept-encoding": true,
+									"accept": true,
+									"user-agent": true,
+									"host": true,
+									"content-length": true,
+									"content-type": true
+								}
+							},
+							"request": {
+								"method": "POST",
+								"header": [],
+								"url": {
+									"raw": "{{APIGateway-baseUrl}}/test/authenticated",
+									"host": [
+										"{{APIGateway-baseUrl}}"
+									],
+									"path": [
+										"test",
+										"authenticated"
+									]
+								}
+							},
+							"response": [],
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"pm.test(\"Missing token: 401 Unauthorized\", function () {",
+											"    pm.response.to.have.status(401);",
+											"});"
+										],
+										"type": "text/javascript",
+										"packages": {}
+									}
+								}
+							]
+						},
+						{
+							"name": "Authenticated (invalid token)",
+							"protocolProfileBehavior": {
+								"disabledSystemHeaders": {
+									"connection": true,
+									"accept-encoding": true,
+									"accept": true,
+									"user-agent": true,
+									"host": true,
+									"content-length": true,
+									"content-type": true
+								}
+							},
+							"request": {
+								"method": "POST",
+								"header": [
+									{
+										"key": "Authorization",
+										"value": "Bearer not-a-valid-jwt",
+										"type": "text"
+									}
+								],
+								"url": {
+									"raw": "{{APIGateway-baseUrl}}/test/authenticated",
+									"host": [
+										"{{APIGateway-baseUrl}}"
+									],
+									"path": [
+										"test",
+										"authenticated"
+									]
+								}
+							},
+							"response": [],
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"pm.test(\"Malformed token: 401 Unauthorized\", function () {",
+											"    pm.response.to.have.status(401);",
+											"});"
+										],
+										"type": "text/javascript",
+										"packages": {}
+									}
+								}
+							]
+						},
+						{
+							"name": "Authenticated (refresh token)",
+							"protocolProfileBehavior": {
+								"disabledSystemHeaders": {
+									"connection": true,
+									"accept-encoding": true,
+									"accept": true,
+									"user-agent": true,
+									"host": true,
+									"content-length": true,
+									"content-type": true
+								}
+							},
+							"request": {
+								"method": "POST",
+								"header": [
+									{
+										"key": "Authorization",
+										"value": "Bearer {{RefreshToken}}",
+										"type": "text"
+									}
+								],
+								"url": {
+									"raw": "{{APIGateway-baseUrl}}/test/authenticated",
+									"host": [
+										"{{APIGateway-baseUrl}}"
+									],
+									"path": [
+										"test",
+										"authenticated"
+									]
+								}
+							},
+							"response": [],
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"pm.test(\"A refresh token is not accepted as an access token (401)\", function () {",
+											"    pm.response.to.have.status(401);",
+											"});"
+										],
+										"type": "text/javascript",
+										"packages": {}
+									}
+								}
+							]
+						},
+						{
+							"name": "Admin Only",
+							"protocolProfileBehavior": {
+								"disabledSystemHeaders": {
+									"connection": true,
+									"accept-encoding": true,
+									"accept": true,
+									"user-agent": true,
+									"host": true,
+									"content-length": true,
+									"content-type": true
+								}
+							},
+							"request": {
+								"method": "POST",
+								"header": [
+									{
+										"key": "Authorization",
+										"value": "Bearer {{AccessToken}}",
+										"type": "text"
+									},
+									{
+										"key": "",
+										"value": "",
+										"type": "text",
+										"disabled": true
+									}
+								],
+								"url": {
+									"raw": "{{APIGateway-baseUrl}}/test/admin-only",
+									"host": [
+										"{{APIGateway-baseUrl}}"
+									],
+									"path": [
+										"test",
+										"admin-only"
+									]
+								}
+							},
+							"response": [],
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"pm.test(\"CONTRIBUTOR token on an ADMIN route: 403 Forbidden\", function () {",
+											"    pm.response.to.have.status(403);",
+											"});"
+										],
+										"type": "text/javascript",
+										"packages": {}
+									}
+								}
+							]
+						},
+						{
+							"name": "Admin and Contributor",
+							"protocolProfileBehavior": {
+								"disabledSystemHeaders": {
+									"connection": true,
+									"accept-encoding": true,
+									"accept": true,
+									"user-agent": true,
+									"host": true,
+									"content-length": true,
+									"content-type": true
+								}
+							},
+							"request": {
+								"method": "POST",
+								"header": [
+									{
+										"key": "Authorization",
+										"value": "Bearer {{AccessToken}}",
+										"type": "text"
+									},
+									{
+										"key": "",
+										"value": "",
+										"type": "text",
+										"disabled": true
+									}
+								],
+								"url": {
+									"raw": "{{APIGateway-baseUrl}}/test/admin-and-contributor",
+									"host": [
+										"{{APIGateway-baseUrl}}"
+									],
+									"path": [
+										"test",
+										"admin-and-contributor"
+									]
+								}
+							},
+							"response": [],
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"pm.test(\"ADMIN AND CONTRIBUTOR required, CONTRIBUTOR only: 403 Forbidden\", function () {",
+											"    pm.response.to.have.status(403);",
+											"});"
+										],
+										"type": "text/javascript",
+										"packages": {}
+									}
+								}
+							]
+						},
+						{
+							"name": "Admin or Contributor",
+							"protocolProfileBehavior": {
+								"disabledSystemHeaders": {
+									"connection": true,
+									"accept-encoding": true,
+									"accept": true,
+									"user-agent": true,
+									"host": true,
+									"content-length": true,
+									"content-type": true
+								}
+							},
+							"request": {
+								"method": "POST",
+								"header": [
+									{
+										"key": "Authorization",
+										"value": "Bearer {{AccessToken}}",
+										"type": "text"
+									},
+									{
+										"key": "",
+										"value": "",
+										"type": "text",
+										"disabled": true
+									}
+								],
+								"url": {
+									"raw": "{{APIGateway-baseUrl}}/test/admin-or-contributor",
+									"host": [
+										"{{APIGateway-baseUrl}}"
+									],
+									"path": [
+										"test",
+										"admin-or-contributor"
+									]
+								}
+							},
+							"response": [],
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"pm.test(\"ADMIN OR CONTRIBUTOR: a CONTRIBUTOR token is enough (200)\", function () {",
+											"    pm.response.to.have.status(200);",
+											"});",
+											"",
+											"// The test routes echo the headers that reached the service (names compared in lower case)",
+											"const forwarded = {};",
+											"Object.entries(pm.response.json()).forEach(function ([name, value]) {",
+											"    forwarded[name.toLowerCase()] = value;",
+											"});",
+											"",
+											"pm.test(\"The gateway forwards the identity from the token\", function () {",
+											"    pm.expect(forwarded[\"x-user-id\"]).to.eql(pm.variables.get(\"testUserId\"));",
+											"    pm.expect(forwarded[\"x-user-name\"]).to.eql(pm.variables.get(\"testUsername\"));",
+											"});"
+										],
+										"type": "text/javascript",
+										"packages": {}
+									}
+								}
+							]
+						},
+						{
+							"name": "Soft Auth",
+							"protocolProfileBehavior": {
+								"disabledSystemHeaders": {
+									"connection": true,
+									"accept-encoding": true,
+									"accept": true,
+									"user-agent": true,
+									"host": true,
+									"content-length": true,
+									"content-type": true
+								}
+							},
+							"request": {
+								"method": "POST",
+								"header": [
+									{
+										"key": "Authorization",
+										"value": "Bearer {{AccessToken}}",
+										"type": "text",
+										"disabled": true
+									},
+									{
+										"key": "",
+										"value": "",
+										"type": "text",
+										"disabled": true
+									}
+								],
+								"url": {
+									"raw": "{{APIGateway-baseUrl}}/test/soft-auth",
+									"host": [
+										"{{APIGateway-baseUrl}}"
+									],
+									"path": [
+										"test",
+										"soft-auth"
+									]
+								}
+							},
+							"response": [],
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"pm.test(\"Optional authentication: anonymous request passes (200)\", function () {",
+											"    pm.response.to.have.status(200);",
+											"});",
+											"",
+											"// The test routes echo the headers that reached the service (names compared in lower case)",
+											"const forwarded = {};",
+											"Object.entries(pm.response.json()).forEach(function ([name, value]) {",
+											"    forwarded[name.toLowerCase()] = value;",
+											"});",
+											"",
+											"pm.test(\"No identity headers reach the service\", function () {",
+											"    pm.expect(forwarded).to.not.have.property(\"x-user-id\");",
+											"    pm.expect(forwarded).to.not.have.property(\"x-user-name\");",
+											"});"
+										],
+										"type": "text/javascript",
+										"packages": {}
+									}
+								}
+							]
+						},
+						{
+							"name": "Soft Auth (spoofed identity headers)",
+							"protocolProfileBehavior": {
+								"disabledSystemHeaders": {
+									"connection": true,
+									"accept-encoding": true,
+									"accept": true,
+									"user-agent": true,
+									"host": true,
+									"content-length": true,
+									"content-type": true
+								}
+							},
+							"request": {
+								"method": "POST",
+								"header": [
+									{
+										"key": "X-User-Id",
+										"value": "00000000-0000-0000-0000-000000000000",
+										"type": "text"
+									},
+									{
+										"key": "X-User-Name",
+										"value": "spoofed-user",
+										"type": "text"
+									}
+								],
+								"url": {
+									"raw": "{{APIGateway-baseUrl}}/test/soft-auth",
+									"host": [
+										"{{APIGateway-baseUrl}}"
+									],
+									"path": [
+										"test",
+										"soft-auth"
+									]
+								}
+							},
+							"response": [],
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"pm.test(\"Optional authentication without a token: 200\", function () {",
+											"    pm.response.to.have.status(200);",
+											"});",
+											"",
+											"// The test routes echo the headers that reached the service (names compared in lower case)",
+											"const forwarded = {};",
+											"Object.entries(pm.response.json()).forEach(function ([name, value]) {",
+											"    forwarded[name.toLowerCase()] = value;",
+											"});",
+											"",
+											"pm.test(\"Identity headers sent by the client are dropped\", function () {",
+											"    pm.expect(forwarded).to.not.have.property(\"x-user-id\");",
+											"    pm.expect(forwarded).to.not.have.property(\"x-user-name\");",
+											"});"
+										],
+										"type": "text/javascript",
+										"packages": {}
+									}
+								}
+							]
+						},
+						{
+							"name": "Soft Auth (token and spoofed headers)",
+							"protocolProfileBehavior": {
+								"disabledSystemHeaders": {
+									"connection": true,
+									"accept-encoding": true,
+									"accept": true,
+									"user-agent": true,
+									"host": true,
+									"content-length": true,
+									"content-type": true
+								}
+							},
+							"request": {
+								"method": "POST",
+								"header": [
+									{
+										"key": "Authorization",
+										"value": "Bearer {{AccessToken}}",
+										"type": "text"
+									},
+									{
+										"key": "X-User-Id",
+										"value": "00000000-0000-0000-0000-000000000000",
+										"type": "text"
+									},
+									{
+										"key": "X-User-Name",
+										"value": "spoofed-user",
+										"type": "text"
+									}
+								],
+								"url": {
+									"raw": "{{APIGateway-baseUrl}}/test/soft-auth",
+									"host": [
+										"{{APIGateway-baseUrl}}"
+									],
+									"path": [
+										"test",
+										"soft-auth"
+									]
+								}
+							},
+							"response": [],
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"pm.test(\"Optional authentication with a valid token: 200\", function () {",
+											"    pm.response.to.have.status(200);",
+											"});",
+											"",
+											"// The test routes echo the headers that reached the service (names compared in lower case)",
+											"const forwarded = {};",
+											"Object.entries(pm.response.json()).forEach(function ([name, value]) {",
+											"    forwarded[name.toLowerCase()] = value;",
+											"});",
+											"",
+											"pm.test(\"The identity comes from the token, not from the client headers\", function () {",
+											"    pm.expect(forwarded[\"x-user-id\"]).to.eql(pm.variables.get(\"testUserId\"));",
+											"    pm.expect(forwarded[\"x-user-name\"]).to.eql(pm.variables.get(\"testUsername\"));",
+											"});"
+										],
+										"type": "text/javascript",
+										"packages": {}
+									}
+								}
+							]
+						}
+					],
+					"description": "One request per route-security rule, with the expected status code asserted. Run it after Auth, with the freshly registered CONTRIBUTOR user: an ADMIN user would get 200 on the ADMIN routes. It also checks the negative cases (no token, malformed token, refresh token used as an access token) and that identity headers sent by the client never reach the services."
+				},
+				{
+					"name": "Create Event",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "formdata",
+							"formdata": [
+								{
+									"key": "event",
+									"value": "{\n  \"title\": \"Incendio en depósito\",\n  \"description\": \"Fuego en depósito de materiales inflamables, sin heridos reportados.\",\n  \"category\": \"INCENDIO\",\n  \"latitude\": -34.603722,\n  \"longitude\": -58.381592,\n  \"eventDate\": \"2025-05-15\"\n}",
+									"type": "text",
+									"contentType": "application/json"
+								}
+							]
+						},
+						"url": {
+							"raw": "{{APIGateway-baseUrl}}/events",
+							"host": [
+								"{{APIGateway-baseUrl}}"
+							],
+							"path": [
+								"events"
+							]
+						}
+					},
+					"response": [],
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Anonymous submission through the gateway: 200\", function () {",
+									"    pm.response.to.have.status(200);",
+									"});",
+									"",
+									"pm.test(\"The created event is returned\", function () {",
+									"    const event = pm.response.json();",
+									"    pm.expect(event.id).to.be.a(\"number\");",
+									"    pm.expect(event.title).to.eql(\"Incendio en depósito\");",
+									"});"
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					]
+				},
+				{
+					"name": "Events",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{APIGateway-baseUrl}}/events",
+							"host": [
+								"{{APIGateway-baseUrl}}"
+							],
+							"path": [
+								"events"
+							],
+							"query": [
+								{
+									"key": "category_in",
+									"value": "1,37",
+									"disabled": true
+								},
+								{
+									"key": "province_in",
+									"value": "3, 11,24",
+									"disabled": true
+								},
+								{
+									"key": "source_in",
+									"value": "STATIC,PROXY",
+									"disabled": true
+								},
+								{
+									"key": "uploadDate_gt",
+									"value": "",
+									"disabled": true
+								},
+								{
+									"key": "uploadDate_lt",
+									"value": "",
+									"disabled": true
+								},
+								{
+									"key": "eventDate_gt",
+									"value": "2025-10-01",
+									"disabled": true
+								},
+								{
+									"key": "eventDate_lt",
+									"value": "",
+									"disabled": true
+								},
+								{
+									"key": "fromUpdatedDate",
+									"value": "2025-10-07T13:22:31",
+									"disabled": true
+								},
+								{
+									"key": "size",
+									"value": "100",
+									"disabled": true
+								},
+								{
+									"key": "page",
+									"value": "0",
+									"disabled": true
+								}
+							]
+						}
+					},
+					"response": [],
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Public events feed: 200\", function () {",
+									"    pm.response.to.have.status(200);",
+									"});",
+									"",
+									"pm.test(\"The response is a page of events\", function () {",
+									"    pm.expect(pm.response.json()).to.have.property(\"content\");",
+									"});"
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					]
+				}
+			],
+			"description": "Requests through the API Gateway, with automated assertions. Run the whole folder in order (Collection Runner or Newman) with a username that does not exist yet: Auth registers it and stores the tokens, Tests checks every route-security rule, and the last two requests submit an event anonymously and read the public feed."
+		},
+		{
+			"name": "Multimedia (currently not working)",
+			"item": [
+				{
+					"name": "Create Event",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "formdata",
+							"formdata": [
+								{
+									"key": "event",
+									"value": "{\n  \"contributor\": \"juan.perez\",\n  \"title\": \"Incendio en depósito\",\n  \"description\": \"Fuego en depósito de materiales inflamables, sin heridos reportados.\",\n  \"category\": \"INCENDIO\",\n  \"latitude\": -34.603722,\n  \"longitude\": -58.381592,\n  \"eventDate\": \"2025-05-15T14:30:00\"\n}",
+									"type": "text",
+									"uuid": "ca9376d8-6a04-4d84-83bd-5313daf43f65",
+									"contentType": "application/json"
+								},
+								{
+									"key": "multimedia",
+									"type": "file",
+									"uuid": "f7c495a2-6241-48ef-b3db-7adfc58b8916",
+									"src": []
+								}
+							]
+						},
+						"url": {
+							"raw": "{{APIGateway-baseUrl}}/events",
+							"host": [
+								"{{APIGateway-baseUrl}}"
+							],
+							"path": [
+								"events"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Event Image",
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"method": "GET",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n  \"contributor\": \"juan.perez\",\r\n  \"title\": \"Incendio en zona norte\",\r\n  \"description\": \"Se reporta un incendio en un terreno baldío cercano a la ruta.\",\r\n  \"category\": \"INSENDIO\",\r\n  \"latitude\": -34.603722,\r\n  \"longitude\": -58.381592,\r\n  \"eventDate\": \"2025-05-15T14:30:00\"\r\n}"
+						},
+						"url": {
+							"raw": "{{APIGateway-baseUrl}}/events/:eventId/images/:imageName",
+							"host": [
+								"{{APIGateway-baseUrl}}"
+							],
+							"path": [
+								"events",
+								":eventId",
+								"images",
+								":imageName"
+							],
+							"variable": [
+								{
+									"key": "eventId",
+									"value": "2"
+								},
+								{
+									"key": "imageName",
+									"value": "2cdcd6a2-8d8d-4e12-bc0a-cb1a1494c025.JPG"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Events",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{APIGateway-baseUrl}}/events",
+							"host": [
+								"{{APIGateway-baseUrl}}"
+							],
+							"path": [
+								"events"
+							],
+							"query": [
+								{
+									"key": "category_in",
+									"value": "1,37",
+									"disabled": true
+								},
+								{
+									"key": "province_in",
+									"value": "3, 11,24",
+									"disabled": true
+								},
+								{
+									"key": "source_in",
+									"value": "STATIC,PROXY",
+									"disabled": true
+								},
+								{
+									"key": "uploadDate_gt",
+									"value": "",
+									"disabled": true
+								},
+								{
+									"key": "uploadDate_lt",
+									"value": "",
+									"disabled": true
+								},
+								{
+									"key": "eventDate_gt",
+									"value": "2025-10-01",
+									"disabled": true
+								},
+								{
+									"key": "eventDate_lt",
+									"value": "",
+									"disabled": true
+								},
+								{
+									"key": "fromUpdatedDate",
+									"value": "2025-10-07T13:22:31",
+									"disabled": true
+								},
+								{
+									"key": "size",
+									"value": "100",
+									"disabled": true
+								},
+								{
+									"key": "page",
+									"value": "0",
+									"disabled": true
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Multimedia",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{APIGateway-baseUrl}}/multimedia/:path",
+							"host": [
+								"{{APIGateway-baseUrl}}"
+							],
+							"path": [
+								"multimedia",
+								":path"
+							],
+							"variable": [
+								{
+									"key": "path",
+									"value": "events/d5f4d976-4a90-4b7a-a44f-3d90b01fceec"
+								}
+							]
+						}
+					},
+					"response": []
+				}
+			],
+			"description": "Kept for reference. This folder was marked as not working when the collection was exported; its image route (/events/:eventId/images/:imageName) is not one of the gateway routes, which serve media from /api/v1/multimedia/**."
+		},
+		{
+			"name": "Auth",
+			"item": [
+				{
+					"name": "Register",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"username\": \"{{testUsername}}\",\r\n    \"password\": \"{{testPassword}}\"\r\n}\r\n",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{user-service-baseUrl}}/auth/register",
+							"host": [
+								"{{user-service-baseUrl}}"
+							],
+							"path": [
+								"auth",
+								"register"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Login",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"username\": \"{{testUsername}}\",\r\n    \"password\": \"{{testPassword}}\"\r\n}\r\n",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{user-service-baseUrl}}/auth/login",
+							"host": [
+								"{{user-service-baseUrl}}"
+							],
+							"path": [
+								"auth",
+								"login"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "RefreshToken",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"refreshToken\": \"{{RefreshToken}}\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{user-service-baseUrl}}/auth/token/refresh",
+							"host": [
+								"{{user-service-baseUrl}}"
+							],
+							"path": [
+								"auth",
+								"token",
+								"refresh"
+							]
+						}
+					},
+					"response": []
+				}
+			],
+			"description": "User service called directly (without the gateway)."
+		}
+	]
+}
