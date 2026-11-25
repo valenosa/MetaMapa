@@ -94,11 +94,13 @@ Step-by-step guide, including how to generate the JWT keys and create an admin u
 
 ## Screenshots
 
-Taken from a local run with an empty database (the UI is in Spanish).
+Taken from a local run with the static source's sample dataset (1,000 events, normalized through GeoRef) and a few citizen submissions. The UI is in Spanish.
 
-| Landing page | Map view with filters |
+| Map view with filters | Events feed with normalized locations |
 |---|---|
-| ![Landing page](docs/images/landing.png) | ![Map view](docs/images/map.png) |
+| ![Map view](docs/images/map.png) | ![Events feed](docs/images/explore.png) |
+
+More: [admin panel, moderation queue](docs/images/admin-pending.png) · [collections](docs/images/collections.png) · [landing page](docs/images/landing.png)
 
 ## Testing
 
